@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   static const Color sunflowerYellow = Color(0xFFFEC200);
+  static const Color lightCream = Color(0xFFFCFEE8);
+  static const Color mildGreen = Color(0xFF479387);
+  static const Color mildYellow = Color(0xFFF5AA31);
+  static const Color mildBlue = Color(0xFF5388AF);
+  static const Color mildPink = Color(0xFFEC6A84);
   // Alias utama yang digunakan sebagai primary color aplikasi
   static const Color primary = sunflowerYellow;
 

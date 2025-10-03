@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'app/routes/app_pages.dart';
 import 'app/modules/landing_page/views/landing_page_view.dart';
 import 'app/modules/landing_page/bindings/landing_page_binding.dart';
+import 'app/modules/splash_screen/views/splash_screen_view.dart';
+import 'app/modules/splash_screen/bindings/splash_screen_binding.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +20,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'TickTask',
       // Pakai landing page sebagai awal onboarding. Ubah ke Routes.HOME jika ingin langsung ke Home.
-      initialRoute: Routes.LANDING_PAGE,
+      initialRoute: Routes.SPLASH_SCREEN,
       getPages: AppPages.routes,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber),
@@ -104,14 +106,29 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             const SizedBox(height: 24),
             // Tombol contoh akses manual (tidak akan dipakai jika initialRoute sudah ke landing)
-            ElevatedButton(
-              onPressed: () {
-                Get.to(
-                  () => const LandingPageView(),
-                  binding: LandingPageBinding(),
-                );
-              },
-              child: const Text('Ke Landing Page (manual)'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Get.to(
+                      () => const LandingPageView(),
+                      binding: LandingPageBinding(),
+                    );
+                  },
+                  child: const Text('Ke Landing Page (manual)'),
+                ),
+                const SizedBox(width: 12),
+                ElevatedButton(
+                  onPressed: () {
+                    Get.to(
+                      () => const SplashScreenView(),
+                      binding: SplashScreenBinding(),
+                    );
+                  },
+                  child: const Text('Ke Splash Screen'),
+                ),
+              ],
             ),
           ],
         ),
