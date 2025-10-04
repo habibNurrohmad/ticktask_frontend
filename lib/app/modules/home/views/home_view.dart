@@ -7,6 +7,46 @@ import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
+
+  // Tombol filter reusable (aktif/non-aktif)
+  Widget _filterButton({
+    required String label,
+    required TaskFilter value,
+  }) {
+    final isSelected = controller.selectedFilter.value == value;
+    return GestureDetector(
+      onTap: () => controller.setFilter(value),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        curve: Curves.easeOut,
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.darkBlue : AppColors.skyBlue,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.25),
+                    offset: const Offset(0, 4),
+                    blurRadius: 5,
+                    spreadRadius: 0,
+                  ),
+                ]
+              : [],
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontFamily: 'Rothek',
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: isSelected ? Colors.white : Colors.black,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,6 +142,25 @@ class HomeView extends GetView<HomeController> {
                 ],
               ),
             ),
+            const SizedBox(height: 20),
+
+            // Row filter: Prioritas, Terdekat, Semua (rata kiri, eksklusif)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Obx(() {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    _filterButton(label: 'Prioritas', value: TaskFilter.prioritas),
+                    const SizedBox(width: 10),
+                    _filterButton(label: 'Terdekat', value: TaskFilter.terdekat),
+                    const SizedBox(width: 10),
+                    _filterButton(label: 'Semua', value: TaskFilter.semua),
+                  ],
+                );
+              }),
+            ),
+
             // ... add other content below as needed
           ],
         ),

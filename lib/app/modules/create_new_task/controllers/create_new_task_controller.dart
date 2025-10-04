@@ -1,13 +1,9 @@
 import 'package:get/get.dart';
 
-enum TaskFilter { prioritas, terdekat, semua }
-
-class HomeController extends GetxController {
-  //TODO: Implement HomeController
+class CreateNewTaskController extends GetxController {
+  //TODO: Implement CreateNewTaskController
 
   final count = 0.obs;
-  final selectedFilter = TaskFilter.prioritas.obs;
-
   @override
   void onInit() {
     super.onInit();
@@ -24,6 +20,4 @@ class HomeController extends GetxController {
   }
 
   void increment() => count.value++;
-
-  void setFilter(TaskFilter f) => selectedFilter.value = f;
 }

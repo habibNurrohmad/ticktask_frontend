@@ -7,6 +7,13 @@ class AppColors {
   static const Color mildYellow = Color(0xFFF5AA31);
   static const Color mildBlue = Color(0xFF5388AF);
   static const Color mildPink = Color(0xFFEC6A84);
+  static const Color softCyan = Color(0xFF489BB5);
+  static const Color skyBlue = Color(0xFF9CE7EE);
+  static const Color darkBlue = Color(0xFF21577E);
+  static const Color regularBlue = Color(0xFF94E6FF);
+
+  static const Color lightGreen = Color(0xFFF5FF94);
+  static const Color darkGreen = Color(0xFF258273);
   // Alias utama yang digunakan sebagai primary color aplikasi
   static const Color primary = sunflowerYellow;
 
