@@ -1,7 +1,11 @@
 import 'package:get/get.dart';
 
+import '../modules/about/bindings/about_binding.dart';
+import '../modules/about/views/about_view.dart';
 import '../modules/calendar/bindings/calendar_binding.dart';
 import '../modules/calendar/views/calendar_view.dart';
+import '../modules/change_password/bindings/change_password_binding.dart';
+import '../modules/change_password/views/change_password_view.dart';
 import '../modules/create_new_task/bindings/create_new_task_binding.dart';
 import '../modules/create_new_task/views/create_new_task_view.dart';
 import '../modules/history/bindings/history_binding.dart';
@@ -57,6 +61,16 @@ class AppPages {
       name: _Paths.CREATE_NEW_TASK,
       page: () => const CreateNewTaskView(),
       binding: CreateNewTaskBinding(),
+    ),
+    GetPage(
+      name: _Paths.ABOUT,
+      page: () => const AboutView(),
+      binding: AboutBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHANGE_PASSWORD,
+      page: () => const ChangePasswordView(),
+      binding: ChangePasswordBinding(),
     ),
   ];
 }

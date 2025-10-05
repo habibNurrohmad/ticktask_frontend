@@ -10,6 +10,8 @@ abstract class Routes {
   static const PROFILE = _Paths.PROFILE;
   static const SPLASH_SCREEN = _Paths.SPLASH_SCREEN;
   static const CREATE_NEW_TASK = _Paths.CREATE_NEW_TASK;
+  static const ABOUT = _Paths.ABOUT;
+  static const CHANGE_PASSWORD = _Paths.CHANGE_PASSWORD;
 }
 
 abstract class _Paths {
@@ -21,4 +23,6 @@ abstract class _Paths {
   static const PROFILE = '/profile';
   static const SPLASH_SCREEN = '/splash-screen';
   static const CREATE_NEW_TASK = '/create-new-task';
+  static const ABOUT = '/about';
+  static const CHANGE_PASSWORD = '/change-password';
 }

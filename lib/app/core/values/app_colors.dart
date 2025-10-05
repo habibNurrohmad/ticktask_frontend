@@ -11,7 +11,7 @@ class AppColors {
   static const Color skyBlue = Color(0xFF9CE7EE);
   static const Color darkBlue = Color(0xFF21577E);
   static const Color regularBlue = Color(0xFF94E6FF);
-
+  static const Color darkPink = Color(0xFF924655);
   static const Color lightGreen = Color(0xFFF5FF94);
   static const Color darkGreen = Color(0xFF258273);
   // Alias utama yang digunakan sebagai primary color aplikasi

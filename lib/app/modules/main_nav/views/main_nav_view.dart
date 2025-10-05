@@ -14,7 +14,7 @@ class MainNavView extends GetView<MainNavController> {
 
   @override
   Widget build(BuildContext context) {
-    final pages = const [
+    final pages = [
       HomeView(),
       CalendarView(),
       HistoryView(),
@@ -159,7 +159,7 @@ class _AnimatedBottomBar extends StatelessWidget {
                           highlightColor: Colors.transparent,
                           icon: Icon(
                             i == index ? items[i].selected : items[i].unselected,
-                            color: i == index ? AppColors.lightCream : Colors.black87,
+                            color: i == index ? AppColors.lightCream : const Color.fromARGB(221, 63, 63, 63),
                             size: _iconSize,
                           ),
                         ),
@@ -230,7 +230,7 @@ class _NewTaskButton extends StatelessWidget {
                   child: Text(
                     'Tambahkan Task Baru',
                     style: TextStyle(
-                      fontSize: 23,
+                      fontSize: 21,
                       fontWeight: FontWeight.w600,
                       color: foregroundColor,
                     ),
