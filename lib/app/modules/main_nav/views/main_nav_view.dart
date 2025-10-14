@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart'; // tambahkan untuk CupertinoPageRoute
 import 'package:get/get.dart';
 
 import '../../calendar/views/calendar_view.dart';
@@ -64,7 +65,11 @@ class MainNavView extends GetView<MainNavController> {
                         color: newTaskFillColor!,            // bg icon & bg teks
                         materialColor: newTaskMaterialColor!, // bg material utama
                         foregroundColor: newTaskForegroundColor!, // warna ikon & teks
-                        onTap: () => Get.to(() => const CreateNewTaskView()),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            CupertinoPageRoute(builder: (_) => CreateNewTaskView()),
+                          );
+                        },
                       ),
                     if (index == 0 || index == 1) const SizedBox(height: 12),
                     ClipRRect(
@@ -103,9 +108,9 @@ class _AnimatedBottomBar extends StatelessWidget {
   final Color indicatorColor;
   final ValueChanged<int> onTap;
 
-  static const double _barHeight = 88;
-  static const double _indicatorSize = 62; // lebih besar dari default
-  static const double _iconSize = 35;
+  static const double _barHeight = 75;
+  static const double _indicatorSize = 55; // lebih besar dari default
+  static const double _iconSize = 30;
 
   @override
   Widget build(BuildContext context) {
@@ -188,7 +193,7 @@ class _NewTaskButton extends StatelessWidget {
   final Color materialColor;
   final Color foregroundColor;
 
-  static const double _height = 70;
+  static const double _height = 60;
 
   @override
   Widget build(BuildContext context) {
@@ -207,8 +212,8 @@ class _NewTaskButton extends StatelessWidget {
             children: [
               // Container icon add task
               Container(
-                width: 50,
-                height: 50,
+                width: 40,
+                height: 40,
                 decoration: BoxDecoration(
                   color: color, // Home: regularBlue, Calendar: lightGreen
                   shape: BoxShape.circle,
@@ -226,11 +231,11 @@ class _NewTaskButton extends StatelessWidget {
                     color: color, // Home: regularBlue, Calendar: lightGreen
                     borderRadius: BorderRadius.circular(100),
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                  padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
                   child: Text(
                     'Tambahkan Task Baru',
                     style: TextStyle(
-                      fontSize: 21,
+                      fontSize: 19,
                       fontWeight: FontWeight.w600,
                       color: foregroundColor,
                     ),

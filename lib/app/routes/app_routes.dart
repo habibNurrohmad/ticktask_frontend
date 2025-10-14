@@ -12,6 +12,7 @@ abstract class Routes {
   static const CREATE_NEW_TASK = _Paths.CREATE_NEW_TASK;
   static const ABOUT = _Paths.ABOUT;
   static const CHANGE_PASSWORD = _Paths.CHANGE_PASSWORD;
+  static const NOTIFICATION = _Paths.NOTIFICATION;
 }
 
 abstract class _Paths {
@@ -25,4 +26,5 @@ abstract class _Paths {
   static const CREATE_NEW_TASK = '/create-new-task';
   static const ABOUT = '/about';
   static const CHANGE_PASSWORD = '/change-password';
+  static const NOTIFICATION = '/notification';
 }

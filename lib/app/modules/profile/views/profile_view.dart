@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart'; // tambahkan untuk CupertinoPageRoute
 
 import 'package:get/get.dart';
 import 'package:ticktask_frontend/app/core/values/app_colors.dart';
+import 'package:ticktask_frontend/app/modules/about/views/about_view.dart';
+import 'package:ticktask_frontend/app/modules/change_password/views/change_password_view.dart';
 
 import '../controllers/profile_controller.dart';
 
@@ -50,7 +53,7 @@ class ProfileView extends GetView<ProfileController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(height: 50),
+            const SizedBox(height: 30),
             // Title at top center
             const Center(
               child: Text(
@@ -64,7 +67,7 @@ class ProfileView extends GetView<ProfileController> {
                 ),
               ),
             ),
-            const SizedBox(height: 70),
+            const SizedBox(height: 30),
             // Avatar + tombol kamera
             Center(
               child: SizedBox(
@@ -142,7 +145,7 @@ class ProfileView extends GetView<ProfileController> {
               child: Column(
                 children: [
                   Text(
-                    'Albrillyant Rizky E.',
+                    'Neil Amstrong',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: 'Rothek',
@@ -152,12 +155,12 @@ class ProfileView extends GetView<ProfileController> {
                     ),
                   ),
                   Text(
-                    'albrillyant@email.com',
+                    'neilamstrong@email.com',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: 'Rothek',
                       fontSize: 15,
-                      fontWeight: FontWeight.w400,
+                      fontWeight: FontWeight.w500,
                       color: Colors.black54,
                     ),
                   ),
@@ -174,9 +177,13 @@ class ProfileView extends GetView<ProfileController> {
                     borderRadius: BorderRadius.circular(16),
                     child: InkWell(
                       borderRadius: BorderRadius.circular(16),
-                      onTap: () => Get.toNamed('/about'),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          CupertinoPageRoute(builder: (_) => AboutView()),
+                        );
+                      },
                       child: const SizedBox(
-                        width: 350,
+                        width: 300,
                         height: 60,
                         child: Row(
                           children: [
@@ -215,9 +222,13 @@ class ProfileView extends GetView<ProfileController> {
                     borderRadius: BorderRadius.circular(16),
                     child: InkWell(
                       borderRadius: BorderRadius.circular(16),
-                      onTap: () => Get.toNamed('/change-password'),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          CupertinoPageRoute(builder: (_) => ChangePasswordView()),
+                        );
+                      },
                       child: const SizedBox(
-                        width: 350,
+                        width: 300,
                         height: 60,
                         child: Row(
                           children: [
@@ -252,7 +263,7 @@ class ProfileView extends GetView<ProfileController> {
                   ),
                   const SizedBox(height: 48),
                   SizedBox(
-                    width: 350,
+                    width: 300,
                     height: 60,
                     child: ElevatedButton(
                       // onPressed: () => controller.logout(),

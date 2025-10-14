@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart'; // <-- tambah impor ini
 
 import 'package:get/get.dart';
 import 'package:ticktask_frontend/app/core/values/app_colors.dart';
+import 'package:ticktask_frontend/app/modules/notification/views/notification_view.dart';
 
 import '../controllers/home_controller.dart';
 
@@ -14,8 +16,18 @@ class HomeView extends GetView<HomeController> {
 
   static const List<int> _years = [2025, 2026, 2027];
   static const List<String> _monthNames = [
-    'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    'Januari',
+    'Februari',
+    'Maret',
+    'April',
+    'Mei',
+    'Juni',
+    'Juli',
+    'Agustus',
+    'September',
+    'Oktober',
+    'November',
+    'Desember',
   ];
 
   // Sample data untuk daftar kartu
@@ -59,13 +71,16 @@ class HomeView extends GetView<HomeController> {
 
   String get _yearLabel => _selectedYear.value?.toString() ?? 'Semua Tahun';
   String get _monthLabel =>
-      _selectedMonth.value != null ? _monthNames[_selectedMonth.value! - 1] : 'Semua Bulan';
+      _selectedMonth.value != null
+          ? _monthNames[_selectedMonth.value! - 1]
+          : 'Semua Bulan';
 
   // Format rentang tanggal seperti contoh: "30 Desember 2025 – 31 Januari 2026"
   String _formatDateRange(DateTime start, DateTime end) {
-    String fmt(DateTime d) =>
-        '${d.day} ${_monthNames[d.month - 1]} ${d.year}';
-    if (start.year == end.year && start.month == end.month && start.day == end.day) {
+    String fmt(DateTime d) => '${d.day} ${_monthNames[d.month - 1]} ${d.year}';
+    if (start.year == end.year &&
+        start.month == end.month &&
+        start.day == end.day) {
       return fmt(start);
     }
     return '${fmt(start)} – ${fmt(end)}';
@@ -163,7 +178,10 @@ class HomeView extends GetView<HomeController> {
                   color: Colors.black,
                   borderRadius: BorderRadius.circular(100),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
                 child: Text(
                   'Waktu: ${data.timeRange}',
                   style: const TextStyle(
@@ -181,7 +199,10 @@ class HomeView extends GetView<HomeController> {
                     color: const Color(0xFFD14A4A),
                     borderRadius: BorderRadius.circular(100),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
                   child: const Text(
                     'Prioritas',
                     style: TextStyle(
@@ -200,10 +221,7 @@ class HomeView extends GetView<HomeController> {
   }
 
   // Tombol filter reusable (aktif/non-aktif)
-  Widget _filterButton({
-    required String label,
-    required TaskFilter value,
-  }) {
+  Widget _filterButton({required String label, required TaskFilter value}) {
     final isSelected = controller.selectedFilter.value == value;
     return GestureDetector(
       onTap: () => controller.setFilter(value),
@@ -214,16 +232,17 @@ class HomeView extends GetView<HomeController> {
         decoration: BoxDecoration(
           color: isSelected ? AppColors.darkBlue : AppColors.skyBlue,
           borderRadius: BorderRadius.circular(10),
-          boxShadow: isSelected
-              ? [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.25),
-                    offset: const Offset(0, 4),
-                    blurRadius: 5,
-                    spreadRadius: 0,
-                  ),
-                ]
-              : [],
+          boxShadow:
+              isSelected
+                  ? [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.25),
+                      offset: const Offset(0, 4),
+                      blurRadius: 5,
+                      spreadRadius: 0,
+                    ),
+                  ]
+                  : [],
         ),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Text(
@@ -256,7 +275,7 @@ class HomeView extends GetView<HomeController> {
               color: Colors.black.withOpacity(0.07),
               offset: const Offset(0, 2),
               blurRadius: 4,
-            )
+            ),
           ],
         ),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
@@ -309,9 +328,10 @@ class HomeView extends GetView<HomeController> {
 
         return SafeArea(
           child: ConstrainedBox(
-            constraints: needsScroll
-                ? BoxConstraints(maxHeight: maxHeight)
-                : const BoxConstraints(), // wrap ke konten jika cukup
+            constraints:
+                needsScroll
+                    ? BoxConstraints(maxHeight: maxHeight)
+                    : const BoxConstraints(), // wrap ke konten jika cukup
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -430,6 +450,13 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
+  // Custom right-to-left push with parallax (Home bergeser sedikit ke kiri)
+  Route<void> _createNotificationRoute() {
+    return CupertinoPageRoute<void>(
+      builder: (context) => NotificationView(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -438,30 +465,30 @@ class HomeView extends GetView<HomeController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(height: 50),
+            const SizedBox(height: 30),
             // Title at top center
             const Center(
               child: Text(
-              'TickTask',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: 'Rothek',
-                fontSize: 32,
-                fontWeight: FontWeight.w900, // Rothek Black
-                color: AppColors.lightCream,
-              ),
+                'TickTask',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: 'Rothek',
+                  fontSize: 32,
+                  fontWeight: FontWeight.w900, // Rothek Black
+                  color: AppColors.lightCream,
+                ),
               ),
             ),
             const Center(
               child: Text(
-              'Hi, Someone',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: 'Rothek',
-                fontSize: 20,
-                fontWeight: FontWeight.w400, // Rothek Regular
-                color: AppColors.lightCream,
-              ),
+                'Hi, Someone',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: 'Rothek',
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400, // Rothek Regular
+                  color: AppColors.lightCream,
+                ),
               ),
             ),
             const SizedBox(height: 30),
@@ -469,57 +496,85 @@ class HomeView extends GetView<HomeController> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Row(
                 children: [
-                  // Search bar
-                  Expanded(
+                    // Search bar
+                    Expanded(
                     child: Container(
                       decoration: BoxDecoration(
-                        color: AppColors.lightCream,
-                        borderRadius: BorderRadius.circular(100),
+                      color: AppColors.lightCream,
+                      borderRadius: BorderRadius.circular(100),
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 1.2,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                        color: Colors.black.withOpacity(0.3),
+                        offset: const Offset(0, 2),
+                        blurRadius: 6,
+                        ),
+                      ],
                       ),
                       padding: const EdgeInsets.fromLTRB(30, 3, 3, 3),
                       child: Row(
-                        children: [
-                          const Expanded(
-                            child: TextField(
-                              decoration: InputDecoration(
-                                hintText: 'Search by keywords',
-                                border: InputBorder.none,
-                                isCollapsed: true,
-                              ),
-                              style: TextStyle(
-                                fontFamily: 'Rothek',
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
+                      children: [
+                        const Expanded(
+                        child: TextField(
+                          decoration: InputDecoration(
+                          hintText: 'Search by keywords',
+                          border: InputBorder.none,
+                          isCollapsed: true,
                           ),
-                          const SizedBox(width: 8),
-                            Container(
-                            decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                            padding: const EdgeInsets.all(15),
-                            child: const Icon(Icons.search, color: Colors.white),
-                            ),
-                        ],
+                          style: TextStyle(
+                          fontFamily: 'Rothek',
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        ),
+                        const SizedBox(width: 8),
+                        Container(
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                        padding: const EdgeInsets.all(10),
+                        child: const Icon(
+                          Icons.search,
+                          color: Colors.white,
+                        ),
+                        ),
+                      ],
                       ),
                     ),
                   ),
                   const SizedBox(width: 15),
                   // Notification button
-                    Container(
+                  Container(
                     decoration: BoxDecoration(
                       color: AppColors.lightCream,
                       borderRadius: BorderRadius.circular(100),
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 1.2,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                        color: Colors.black.withOpacity(0.3),
+                        offset: const Offset(0, 2),
+                        blurRadius: 6,
+                        ),
+                      ],
                     ),
-                    padding: const EdgeInsets.all(4),
+                    padding: const EdgeInsets.all(1),
                     child: IconButton(
                       onPressed: () {
-                      // TODO: handle notification button tap
+                        Navigator.of(context).push(_createNotificationRoute());
                       },
-                      icon: const Icon(Icons.notifications, color: Colors.black),
-                      iconSize: 35,
+                      icon: const Icon(
+                        Icons.notifications,
+                        color: Colors.black,
+                      ),
+                      iconSize: 30,
                     ),
                   ),
                 ],
@@ -532,14 +587,29 @@ class HomeView extends GetView<HomeController> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Obx(() {
                 return Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(child: _filterButton(label: 'Prioritas', value: TaskFilter.prioritas)),
-                  const SizedBox(width: 10),
-                  Expanded(child: _filterButton(label: 'Terdekat', value: TaskFilter.terdekat)),
-                  const SizedBox(width: 10),
-                  Expanded(child: _filterButton(label: 'Semua', value: TaskFilter.semua)),
-                ],
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: _filterButton(
+                        label: 'Prioritas',
+                        value: TaskFilter.prioritas,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: _filterButton(
+                        label: 'Terdekat',
+                        value: TaskFilter.terdekat,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: _filterButton(
+                        label: 'Semua',
+                        value: TaskFilter.semua,
+                      ),
+                    ),
+                  ],
                 );
               }),
             ),
@@ -547,7 +617,7 @@ class HomeView extends GetView<HomeController> {
             // Selector row: Tahun & Bulan
             Obx(() {
               final show = controller.selectedFilter.value == TaskFilter.semua;
-              final yearLabel = _yearLabel;   // observe _selectedYear
+              final yearLabel = _yearLabel; // observe _selectedYear
               final monthLabel = _monthLabel; // observe _selectedMonth
               return AnimatedSwitcher(
                 duration: const Duration(milliseconds: 250),
@@ -567,36 +637,39 @@ class HomeView extends GetView<HomeController> {
                     ),
                   );
                 },
-                child: show
-                    ? Column(
-                        key: const ValueKey('selectors'),
-                        children: [
-                          const SizedBox(height: 12),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: _selectorButton(
-                                    label: yearLabel,
-                                    icon: Icons.calendar_today,
-                                    onTap: () => _showYearSelector(context),
+                child:
+                    show
+                        ? Column(
+                          key: const ValueKey('selectors'),
+                          children: [
+                            const SizedBox(height: 12),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0,
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: _selectorButton(
+                                      label: yearLabel,
+                                      icon: Icons.calendar_today,
+                                      onTap: () => _showYearSelector(context),
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: _selectorButton(
-                                    label: monthLabel,
-                                    icon: Icons.event,
-                                    onTap: () => _showMonthSelector(context),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: _selectorButton(
+                                      label: monthLabel,
+                                      icon: Icons.event,
+                                      onTap: () => _showMonthSelector(context),
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
-                      )
-                    : const SizedBox.shrink(),
+                          ],
+                        )
+                        : const SizedBox.shrink(),
               );
             }),
 
@@ -612,28 +685,39 @@ class HomeView extends GetView<HomeController> {
                 List<_TaskCardData> items;
                 if (filter == TaskFilter.semua) {
                   // Terapkan filter Tahun/Bulan lalu urutkan dari deadline terdekat
-                  items = _sampleTasks
-                      .where((t) => _taskMatchesSelection(t, selectedYear, selectedMonth))
-                      .toList();
+                  items =
+                      _sampleTasks
+                          .where(
+                            (t) => _taskMatchesSelection(
+                              t,
+                              selectedYear,
+                              selectedMonth,
+                            ),
+                          )
+                          .toList();
                   items.sort((a, b) => a.end.compareTo(b.end));
                 } else if (filter == TaskFilter.prioritas) {
                   // Hanya prioritas
-                  items = _sampleTasks.where((t) => t.isPriority).toList()
-                    ..sort((a, b) => a.end.compareTo(b.end)); // urutkan by deadline
+                  items =
+                      _sampleTasks.where((t) => t.isPriority).toList()..sort(
+                        (a, b) => a.end.compareTo(b.end),
+                      ); // urutkan by deadline
                 } else {
                   // Terdekat: ambil 5 dengan deadline terdekat dari sekarang
                   final now = DateTime.now();
-                  final upcoming = _sampleTasks
-                      .where((t) => !t.end.isBefore(now)) // end >= now
-                      .toList()
-                    ..sort((a, b) => a.end.compareTo(b.end));
+                  final upcoming =
+                      _sampleTasks
+                          .where((t) => !t.end.isBefore(now)) // end >= now
+                          .toList()
+                        ..sort((a, b) => a.end.compareTo(b.end));
 
                   if (upcoming.isNotEmpty) {
-                    items = upcoming.take(5).toList();
+                    items = upcoming.take(3).toList();
                   } else {
                     // fallback jika semua sudah lewat: ambil 5 paling dekat secara umum
-                    items = _sampleTasks.toList()
-                      ..sort((a, b) => a.end.compareTo(b.end));
+                    items =
+                        _sampleTasks.toList()
+                          ..sort((a, b) => a.end.compareTo(b.end));
                     items = items.take(5).toList();
                   }
                 }
@@ -661,7 +745,8 @@ class HomeView extends GetView<HomeController> {
                         padding: const EdgeInsets.fromLTRB(16, 0, 16, 205),
                         itemCount: items.length,
                         separatorBuilder: (_, __) => const SizedBox(height: 12),
-                        itemBuilder: (context, index) => _taskCard(items[index]),
+                        itemBuilder:
+                            (context, index) => _taskCard(items[index]),
                       ),
                       // Overlay gradient hitam dari bawah (0% -> 100%)
                       Positioned(
