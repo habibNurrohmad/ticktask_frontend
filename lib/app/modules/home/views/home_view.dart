@@ -139,20 +139,52 @@ class HomeView extends GetView<HomeController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            t.title ?? '',
-            style: const TextStyle(
-              fontFamily: 'Rothek',
-              fontSize: 20,
-              fontWeight: FontWeight.w900,
-            ),
+          // --- TITLE + PRIORITY LABEL ---
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Text(
+                  t.title ?? '',
+                  style: const TextStyle(
+                    fontFamily: 'Rothek',
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ),
+
+              // LABEL PRIORITAS
+              if (t.isPriority == 1)
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Text(
+                    "PRIORITAS",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+            ],
           ),
+
           const SizedBox(height: 6),
+
           Text(
             t.description ?? '',
             style: TextStyle(fontSize: 14, color: Colors.black.withOpacity(.7)),
           ),
           const SizedBox(height: 10),
+
           Row(
             children: [
               Icon(Icons.timer, size: 16, color: Colors.black.withOpacity(.7)),

@@ -3,16 +3,18 @@ class TaskModel {
   final String? title;
   final String? description;
   final String? deadline;
-  final bool isDone;
+  final int? isDone;
   final String? type;
+  final int? isPriority; // <-- integer, bukan bool!
 
   TaskModel({
     this.id,
     this.title,
     this.description,
     this.deadline,
-    this.isDone = false,
+    this.isDone,
     this.type,
+    this.isPriority,
   });
 
   factory TaskModel.fromJson(Map<String, dynamic> json) {
@@ -21,8 +23,9 @@ class TaskModel {
       title: json['title'],
       description: json['description'],
       deadline: json['deadline'],
-      isDone: json['is_done'] == 1,
+      isDone: json['is_done'], // int (0/1)
       type: json['type'],
+      isPriority: json['is_priority'], // int (0/1)
     );
   }
 }

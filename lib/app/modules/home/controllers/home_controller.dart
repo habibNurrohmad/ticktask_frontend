@@ -74,7 +74,7 @@ class HomeController extends GetxController {
 
     // -- FILTER: Prioritas (is_done == 0 berarti belum selesai)
     if (selectedFilter.value == TaskFilter.prioritas) {
-      list = list.where((t) => t.isDone == 0).toList();
+      list = list.where((t) => t.isPriority == 1).toList();
     }
 
     // -- FILTER: Terdekat (sort berdasarkan deadline)
