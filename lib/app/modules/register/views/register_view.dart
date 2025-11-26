@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../routes/app_pages.dart';
-
 import '../controllers/register_controller.dart';
 
 class RegisterView extends GetView<RegisterController> {
@@ -14,8 +13,9 @@ class RegisterView extends GetView<RegisterController> {
   Widget _buildPill({
     required IconData leading,
     required String hint,
-    Widget? trailing,
+    required TextEditingController controller,
     bool obscure = false,
+    Widget? trailing,
   }) {
     return Container(
       height: 60,
@@ -26,14 +26,11 @@ class RegisterView extends GetView<RegisterController> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
-          Icon(
-            leading,
-            color: Colors.white.withOpacity(0.9),
-            size: 20,
-          ),
+          Icon(leading, color: Colors.white.withOpacity(0.9), size: 20),
           const SizedBox(width: 12),
           Expanded(
             child: TextField(
+              controller: controller,
               obscureText: obscure,
               style: TextStyle(color: Colors.white.withOpacity(0.95)),
               decoration: InputDecoration.collapsed(
@@ -69,36 +66,36 @@ class RegisterView extends GetView<RegisterController> {
               ),
               const SizedBox(height: 8),
               const Text(
-                'Create an account and start getting your\n task done!',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Color(0xFF6B6970),
-                ),
+                'Create an account and start getting your\ntask done!',
+                style: TextStyle(fontSize: 16, color: Color(0xFF6B6970)),
               ),
               const SizedBox(height: 28),
 
-              // First pill (name)
-              _buildPill(
-                leading: Icons.mail_outline,
-                hint: 'James Alex',
-              ),
-              const SizedBox(height: 18),
-
-              // Second pill (email)
+              // Name
               _buildPill(
                 leading: Icons.person_outline,
-                hint: 'jamesalex@titaks.tes',
+                hint: 'Your full name',
+                controller: controller.usernameController,
               ),
               const SizedBox(height: 18),
 
-              // Third pill (password) with toggle
+              // Email
+              _buildPill(
+                leading: Icons.mail_outline,
+                hint: 'youremail@example.com',
+                controller: controller.emailController,
+              ),
+              const SizedBox(height: 18),
+
+              // Password
               Obx(() {
                 return _buildPill(
                   leading: Icons.lock_outline,
                   hint: '***********',
                   obscure: controller.obscurePassword.value,
+                  controller: controller.passwordController,
                   trailing: IconButton(
-                    onPressed: controller.togglePassword,
+                    onPressed: controller.toggleObscure,
                     icon: Icon(
                       controller.obscurePassword.value
                           ? Icons.remove_red_eye_outlined
@@ -108,56 +105,32 @@ class RegisterView extends GetView<RegisterController> {
                   ),
                 );
               }),
-              const SizedBox(height: 18),
-
-              // Fourth pill (username/alias) with toggle (matches design)
-              Obx(() {
-                return _buildPill(
-                  leading: Icons.lock_outline,
-                  hint: 'jamesalexander',
-                  obscure: !controller.obscureUsername.value ? true : false,
-                  trailing: IconButton(
-                    onPressed: controller.toggleUsername,
-                    icon: Icon(
-                      controller.obscureUsername.value
-                          ? Icons.remove_red_eye_outlined
-                          : Icons.visibility_off_outlined,
-                      color: Colors.white.withOpacity(0.9),
-                    ),
-                  ),
-                );
-              }),
-
               const SizedBox(height: 28),
 
-              // Sign in button
-              Center(
-                child: GestureDetector(
-                  onTap: () {
-                    // TODO: hookup registration action
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    height: 56,
-                    decoration: BoxDecoration(
-                      color: _buttonDark,
-                      borderRadius: BorderRadius.circular(40),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.08),
-                          offset: const Offset(0, 4),
-                          blurRadius: 8,
-                        ),
-                      ],
-                    ),
-                    alignment: Alignment.center,
-                    child: const Text(
-                      'Sign in',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
+              // Register button
+              GestureDetector(
+                onTap: controller.register,
+                child: Container(
+                  width: double.infinity,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    color: _buttonDark,
+                    borderRadius: BorderRadius.circular(40),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.08),
+                        offset: const Offset(0, 4),
+                        blurRadius: 8,
                       ),
+                    ],
+                  ),
+                  alignment: Alignment.center,
+                  child: const Text(
+                    'Sign up',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
                     ),
                   ),
                 ),
@@ -167,11 +140,9 @@ class RegisterView extends GetView<RegisterController> {
 
               Center(
                 child: Wrap(
-                  alignment: WrapAlignment.center,
-                  crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     const Text(
-                      'Already have an account ? ',
+                      'Already have an account? ',
                       style: TextStyle(color: Color(0xFF9B9B9B)),
                     ),
                     GestureDetector(
@@ -189,7 +160,6 @@ class RegisterView extends GetView<RegisterController> {
                   ],
                 ),
               ),
-
               const SizedBox(height: 24),
             ],
           ),

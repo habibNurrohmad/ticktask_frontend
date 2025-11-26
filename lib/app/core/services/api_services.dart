@@ -7,7 +7,7 @@ class ApiService extends GetConnect {
   }
 
   // BASE URL (rename agar tidak conflict)
-  static const String apiBaseUrl = "https://wavecoach.cintaramayanti.com/api";
+  static const String apiBaseUrl = "http://10.0.2.2:8000/api";
 
   // STORAGE
   final GetStorage storage = GetStorage();
