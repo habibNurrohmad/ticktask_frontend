@@ -132,7 +132,6 @@ class HomeView extends GetView<HomeController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Title + more button
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
