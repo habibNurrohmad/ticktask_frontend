@@ -5,24 +5,44 @@ import '../../../core/services/api_services.dart';
 class RegisterController extends GetxController {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
   final emailController = TextEditingController();
 
   final obscurePassword = true.obs;
+  final obscureConfirmPassword = true.obs;
+
   final api = ApiService();
 
   void toggleObscure() => obscurePassword.value = !obscurePassword.value;
+  void toggleObscureConfirm() =>
+      obscureConfirmPassword.value = !obscureConfirmPassword.value;
 
   Future<void> register() async {
     final name = usernameController.text.trim();
     final email = emailController.text.trim();
-    final password = passwordController.text;
+    final password = passwordController.text.trim();
+    final confirmPassword = confirmPasswordController.text.trim();
 
-    if (name.isEmpty || email.isEmpty || password.isEmpty) {
+    // VALIDASI FIELD
+    if (name.isEmpty ||
+        email.isEmpty ||
+        password.isEmpty ||
+        confirmPassword.isEmpty) {
       Get.snackbar("Error", "Semua field wajib diisi");
       return;
     }
 
-    final body = {"name": name, "email": email, "password": password};
+    // VALIDASI KEC0C0KAN PASSWORD
+    if (password != confirmPassword) {
+      Get.snackbar("Error", "Password dan konfirmasi password tidak sama");
+      return;
+    }
+
+    final body = {
+      "name": name,
+      "email": email,
+      "password": password, // API-mu tetap aman, tidak kirim confirm password
+    };
 
     try {
       Get.dialog(

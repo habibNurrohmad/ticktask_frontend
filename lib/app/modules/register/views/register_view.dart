@@ -105,6 +105,26 @@ class RegisterView extends GetView<RegisterController> {
                   ),
                 );
               }),
+              const SizedBox(height: 18),
+
+              // CONFIRM PASSWORD (BARU DITAMBAH)
+              Obx(() {
+                return _buildPill(
+                  leading: Icons.lock_reset_outlined,
+                  hint: 'Confirm password',
+                  obscure: controller.obscureConfirmPassword.value,
+                  controller: controller.confirmPasswordController,
+                  trailing: IconButton(
+                    onPressed: controller.toggleObscureConfirm,
+                    icon: Icon(
+                      controller.obscureConfirmPassword.value
+                          ? Icons.remove_red_eye_outlined
+                          : Icons.visibility_off_outlined,
+                      color: Colors.white.withOpacity(0.9),
+                    ),
+                  ),
+                );
+              }),
               const SizedBox(height: 28),
 
               // Register button
