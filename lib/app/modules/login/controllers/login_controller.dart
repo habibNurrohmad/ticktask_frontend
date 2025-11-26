@@ -1,40 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import '../../../core/services/api_services.dart';
+import '../../../routes/app_pages.dart';
 
 class LoginController extends GetxController {
-  // Text controllers for inputs
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
+  final email = TextEditingController();
+  final password = TextEditingController();
 
-  // UI state
-  final obscurePassword = true.obs;
-  final rememberMe = false.obs;
+  final hide = true.obs;
+  final remember = false.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
+  final api = ApiService();
+  final box = GetStorage();
+
+  void togglePassword() {
+    hide.value = !hide.value;
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
+  Future<void> login() async {
+    if (email.text.isEmpty || password.text.isEmpty) {
+      Get.snackbar("Error", "Email & password wajib diisi");
+      return;
+    }
 
-  @override
-  void onClose() {
-    usernameController.dispose();
-    passwordController.dispose();
-    super.onClose();
-  }
+    final body = {"email": email.text.trim(), "password": password.text};
 
-  void toggleObscure() => obscurePassword.value = !obscurePassword.value;
+    final res = await api.login(body);
 
-  void toggleRememberMe() => rememberMe.value = !rememberMe.value;
+    if (res.statusCode == 200) {
+      final token = res.body["token"];
 
-  void login() {
-    final username = usernameController.text.trim();
-    final password = passwordController.text;
-    // TODO: replace with real authentication logic
-    debugPrint('Login pressed — username: $username, password: ${password.isNotEmpty ? '●●●●' : '(empty)'}');
+      if (token == null) {
+        Get.snackbar("Error", "Token tidak ditemukan dari server");
+        return;
+      }
+
+      box.write("token", token);
+
+      Get.offAllNamed(Routes.HOME);
+    } else {
+      Get.snackbar("Login Gagal", res.body["message"] ?? "Terjadi kesalahan");
+    }
   }
 }
