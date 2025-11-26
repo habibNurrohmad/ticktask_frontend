@@ -25,8 +25,8 @@ class LandingPageController extends GetxController {
         curve: Curves.easeInOut,
       );
     } else {
-  // Navigasi ke beranda setelah onboarding selesai
-  Get.offAllNamed(Routes.HOME);
+      // Navigasi ke halaman login setelah onboarding selesai
+      Get.offAllNamed(Routes.LOGIN);
     }
   }
 
