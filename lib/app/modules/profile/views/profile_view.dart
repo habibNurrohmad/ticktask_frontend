@@ -79,59 +79,64 @@ class ProfileView extends GetView<ProfileController> {
                     // Ring luar
                     Obx(
                       () => Container(
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 12,
-                          offset: Offset(0, 6),
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 12,
+                              offset: Offset(0, 6),
+                            ),
+                          ],
                         ),
-                        ],
-                      ),
-                      child: CircleAvatar(
-                        radius: 80,
-                        backgroundColor: AppColors.darkPink,
                         child: CircleAvatar(
-                        radius: 76,
-                        backgroundColor: Colors.white,
-                        backgroundImage: controller.avatarImageProvider.value,
-                        child: controller.avatarImageProvider.value == null
-                          ? const Icon(
-                            Icons.person,
-                            size: 72,
-                            color: AppColors.mildPink,
-                            )
-                          : null,
+                          radius: 80,
+                          backgroundColor: AppColors.darkPink,
+                          child: CircleAvatar(
+                            radius: 76,
+                            backgroundColor: Colors.white,
+                            backgroundImage:
+                                controller.avatarImageProvider.value,
+                            child:
+                                controller.avatarImageProvider.value == null
+                                    ? const Icon(
+                                      Icons.person,
+                                      size: 72,
+                                      color: AppColors.mildPink,
+                                    )
+                                    : null,
+                          ),
                         ),
-                      ),
                       ),
                     ),
                     // Tombol kamera
                     Positioned(
                       right: 0,
                       bottom: 0,
-                        child: GestureDetector(
+                      child: GestureDetector(
                         onTap: () => _showPhotoSourcePicker(context),
                         child: Container(
                           width: 44,
                           height: 44,
                           decoration: BoxDecoration(
-                          color: AppColors.lightCream,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.darkPink, width: 2), // outline hitam
-                          boxShadow: const [
-                            BoxShadow(
-                            color: Colors.black26,
-                            blurRadius: 4,
-                            offset: Offset(0, 2),
-                            ),
-                          ],
+                            color: AppColors.lightCream,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: AppColors.darkPink,
+                              width: 2,
+                            ), // outline hitam
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black26,
+                                blurRadius: 4,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
                           ),
                           child: const Icon(
-                          Icons.camera_alt,
-                          color: AppColors.darkPink,
-                          size: 22,
+                            Icons.camera_alt,
+                            color: AppColors.darkPink,
+                            size: 22,
                           ),
                         ),
                       ),
@@ -141,27 +146,32 @@ class ProfileView extends GetView<ProfileController> {
               ),
             ),
             const SizedBox(height: 30),
-            const Center(
+            Center(
               child: Column(
                 children: [
-                  Text(
-                    'Neil Amstrong',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontFamily: 'Rothek',
-                      fontSize: 25,
-                      fontWeight: FontWeight.w600, // Rothek Black
-                      color: Colors.black,
+                  Obx(
+                    () => Text(
+                      controller.user.value.name ?? "Tidak ada nama",
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontFamily: 'Rothek',
+                        fontSize: 25,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
-                  Text(
-                    'neilamstrong@email.com',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontFamily: 'Rothek',
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black54,
+
+                  Obx(
+                    () => Text(
+                      controller.user.value.email ?? "Tidak ada email",
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontFamily: 'Rothek',
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black54,
+                      ),
                     ),
                   ),
                 ],
@@ -178,9 +188,9 @@ class ProfileView extends GetView<ProfileController> {
                     child: InkWell(
                       borderRadius: BorderRadius.circular(16),
                       onTap: () {
-                        Navigator.of(context).push(
-                          CupertinoPageRoute(builder: (_) => AboutView()),
-                        );
+                        Navigator.of(
+                          context,
+                        ).push(CupertinoPageRoute(builder: (_) => AboutView()));
                       },
                       child: const SizedBox(
                         width: 300,
@@ -224,7 +234,9 @@ class ProfileView extends GetView<ProfileController> {
                       borderRadius: BorderRadius.circular(16),
                       onTap: () {
                         Navigator.of(context).push(
-                          CupertinoPageRoute(builder: (_) => ChangePasswordView()),
+                          CupertinoPageRoute(
+                            builder: (_) => ChangePasswordView(),
+                          ),
                         );
                       },
                       child: const SizedBox(
@@ -267,7 +279,7 @@ class ProfileView extends GetView<ProfileController> {
                     height: 60,
                     child: ElevatedButton(
                       // onPressed: () => controller.logout(),
-                        onPressed: null,
+                      onPressed: null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
                         foregroundColor: Colors.white,

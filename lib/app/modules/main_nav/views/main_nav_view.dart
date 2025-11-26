@@ -15,32 +15,34 @@ class MainNavView extends GetView<MainNavController> {
 
   @override
   Widget build(BuildContext context) {
-    final pages = [
-      HomeView(),
-      CalendarView(),
-      HistoryView(),
-      ProfileView(),
-    ];
+    final pages = [HomeView(), CalendarView(), HistoryView(), ProfileView()];
 
     return Obx(() {
       final index = controller.currentIndex.value;
-      final indicatorColor = <Color>[
-        AppColors.mildBlue,
-        AppColors.mildGreen,
-        AppColors.mildYellow,
-        AppColors.mildPink,
-      ][index];
+      final indicatorColor =
+          <Color>[
+            AppColors.mildBlue,
+            AppColors.mildGreen,
+            AppColors.mildYellow,
+            AppColors.mildPink,
+          ][index];
 
       // Warna tombol "Tambahkan Task Baru" per tab
       final bool isHome = index == 0;
       final bool isCalendar = index == 1;
       final Color? newTaskFillColor =
-          isHome ? AppColors.regularBlue : (isCalendar ? AppColors.lightGreen : null);
+          isHome
+              ? AppColors.regularBlue
+              : (isCalendar ? AppColors.lightGreen : null);
       final Color? newTaskMaterialColor =
-          isHome ? AppColors.darkBlue : (isCalendar ? AppColors.darkGreen : null);
+          isHome
+              ? AppColors.darkBlue
+              : (isCalendar ? AppColors.darkGreen : null);
       // Tambah warna foreground (ikon + teks)
       final Color? newTaskForegroundColor =
-          isHome ? AppColors.darkBlue : (isCalendar ? AppColors.darkGreen : null);
+          isHome
+              ? AppColors.darkBlue
+              : (isCalendar ? AppColors.darkGreen : null);
 
       return Scaffold(
         backgroundColor: AppColors.background,
@@ -62,12 +64,15 @@ class MainNavView extends GetView<MainNavController> {
                   children: [
                     if (index == 0 || index == 1)
                       _NewTaskButton(
-                        color: newTaskFillColor!,            // bg icon & bg teks
-                        materialColor: newTaskMaterialColor!, // bg material utama
-                        foregroundColor: newTaskForegroundColor!, // warna ikon & teks
+                        color: newTaskFillColor!, // bg icon & bg teks
+                        materialColor:
+                            newTaskMaterialColor!, // bg material utama
+                        foregroundColor:
+                            newTaskForegroundColor!, // warna ikon & teks
                         onTap: () {
-                          Navigator.of(context).push(
-                            CupertinoPageRoute(builder: (_) => CreateNewTaskView()),
+                          Get.to(
+                            () => const CreateNewTaskView(),
+                            transition: Transition.cupertino,
                           );
                         },
                       ),
@@ -116,9 +121,18 @@ class _AnimatedBottomBar extends StatelessWidget {
   Widget build(BuildContext context) {
     const items = [
       (unselected: Icons.home_outlined, selected: Icons.home_rounded),
-      (unselected: Icons.calendar_today_outlined, selected: Icons.calendar_month_rounded),
-      (unselected: Icons.history_toggle_off_rounded, selected: Icons.history_rounded),
-      (unselected: Icons.person_outline_rounded, selected: Icons.person_rounded),
+      (
+        unselected: Icons.calendar_today_outlined,
+        selected: Icons.calendar_month_rounded,
+      ),
+      (
+        unselected: Icons.history_toggle_off_rounded,
+        selected: Icons.history_rounded,
+      ),
+      (
+        unselected: Icons.person_outline_rounded,
+        selected: Icons.person_rounded,
+      ),
     ];
 
     return SizedBox(
@@ -133,9 +147,7 @@ class _AnimatedBottomBar extends StatelessWidget {
           return Stack(
             children: [
               // Background bar color
-              Positioned.fill(
-                child: ColoredBox(color: AppColors.lightCream),
-              ),
+              Positioned.fill(child: ColoredBox(color: AppColors.lightCream)),
               // Big circular indicator
               AnimatedPositioned(
                 duration: const Duration(milliseconds: 300),
@@ -163,8 +175,13 @@ class _AnimatedBottomBar extends StatelessWidget {
                           splashColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           icon: Icon(
-                            i == index ? items[i].selected : items[i].unselected,
-                            color: i == index ? AppColors.lightCream : const Color.fromARGB(221, 63, 63, 63),
+                            i == index
+                                ? items[i].selected
+                                : items[i].unselected,
+                            color:
+                                i == index
+                                    ? AppColors.lightCream
+                                    : const Color.fromARGB(221, 63, 63, 63),
                             size: _iconSize,
                           ),
                         ),
@@ -198,7 +215,8 @@ class _NewTaskButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: materialColor, // warna material utama (Home: darkBlue, Calendar: darkGreen)
+      color:
+          materialColor, // warna material utama (Home: darkBlue, Calendar: darkGreen)
       elevation: 6,
       shadowColor: Colors.black.withOpacity(0.10),
       borderRadius: BorderRadius.circular(100),
@@ -231,7 +249,10 @@ class _NewTaskButton extends StatelessWidget {
                     color: color, // Home: regularBlue, Calendar: lightGreen
                     borderRadius: BorderRadius.circular(100),
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 5,
+                    horizontal: 12,
+                  ),
                   child: Text(
                     'Tambahkan Task Baru',
                     style: TextStyle(
