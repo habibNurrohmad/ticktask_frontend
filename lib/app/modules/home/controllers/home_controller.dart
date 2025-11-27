@@ -14,6 +14,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   // tambahan untuk view
   final searchQuery = "".obs;
   final selectedFilter = TaskFilter.semua.obs;
+  // Selected year filter (null = semua tahun)
+  final selectedYear = RxnInt();
 
   // Trigger refresh dari luar
   final refreshTrigger = false.obs;
@@ -107,6 +109,83 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         ..sort((a, b) => (a.deadline ?? "").compareTo(b.deadline ?? ""));
     }
 
+    // -- FILTER: Selected Year (if set)
+    if (selectedYear.value != null) {
+      final y = selectedYear.value!;
+      list = list.where((t) {
+        if (t.deadline == null) return false;
+        try {
+          final dt = DateTime.tryParse(t.deadline!);
+          if (dt == null) return false;
+          return dt.year == y;
+        } catch (_) {
+          return false;
+        }
+      }).toList();
+    }
+
+    // -- FILTER: Selected Month (if set)
+    if (selectedMonth.value != null) {
+      final m = selectedMonth.value!;
+      list = list.where((t) {
+        if (t.deadline == null) return false;
+        try {
+          final dt = DateTime.tryParse(t.deadline!);
+          if (dt == null) return false;
+          return dt.month == m;
+        } catch (_) {
+          return false;
+        }
+      }).toList();
+    }
+
     return list;
+  }
+
+  // Return list of unique years present in unfinished tasks' deadlines
+  List<int> get availableYears {
+    final years = <int>{};
+    for (final t in tasks) {
+      // consider only tasks that are not done (isDone != 1)
+      if (t.isDone == 1) continue;
+      final d = t.deadline;
+      if (d == null) continue;
+      final dt = DateTime.tryParse(d);
+      if (dt == null) continue;
+      years.add(dt.year);
+    }
+
+    final list = years.toList()..sort((a, b) => b.compareTo(a));
+    return list;
+  }
+
+  void setSelectedYear(int? year) {
+    selectedYear.value = year;
+    // Clear selected month when year changes to avoid stale selection
+    selectedMonth.value = null;
+  }
+
+  // Selected month filter (1-12), null = semua bulan
+  final selectedMonth = RxnInt();
+
+  // Return list of unique months (1-12) present in unfinished tasks' deadlines.
+  // If [year] is provided, filter months for that year; otherwise across all years.
+  List<int> availableMonths([int? year]) {
+    final months = <int>{};
+    for (final t in tasks) {
+      if (t.isDone == 1) continue;
+      final d = t.deadline;
+      if (d == null) continue;
+      final dt = DateTime.tryParse(d);
+      if (dt == null) continue;
+      if (year != null && dt.year != year) continue;
+      months.add(dt.month);
+    }
+    final list = months.toList()..sort();
+    return list;
+  }
+
+  void setSelectedMonth(int? month) {
+    selectedMonth.value = month;
   }
 }
