@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../controllers/create_new_task_controller.dart';
 
 class CreateNewTaskView extends StatefulWidget {
   const CreateNewTaskView({super.key});
@@ -8,7 +10,11 @@ class CreateNewTaskView extends StatefulWidget {
 }
 
 class _CreateNewTaskViewState extends State<CreateNewTaskView> {
-  bool _isPriority = false; // ← variabel agar switch dinamis
+  final c = Get.put(CreateNewTaskController());
+
+  final titleC = TextEditingController();
+  final deadlineC = TextEditingController();
+  final descC = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +23,13 @@ class _CreateNewTaskViewState extends State<CreateNewTaskView> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: const Icon(
-          Icons.arrow_back_ios_new,
-          color: Colors.black,
-          size: 20,
+        leading: GestureDetector(
+          onTap: () => Get.back(),
+          child: const Icon(
+            Icons.arrow_back_ios_new,
+            color: Colors.black,
+            size: 20,
+          ),
         ),
         title: const Text(
           "Task Baru",
@@ -41,10 +50,20 @@ class _CreateNewTaskViewState extends State<CreateNewTaskView> {
             children: [
               const SizedBox(height: 20),
 
-              _inputBox("Nama Task"),
+              // --- INPUT TITLE ---
+              _inputBox(
+                controller: titleC,
+                hint: "Nama Task",
+                onChanged: (v) => c.title.value = v,
+              ),
               const SizedBox(height: 15),
 
-              _inputBox("Tanggal"),
+              // --- INPUT DEADLINE ---
+              _inputBox(
+                controller: deadlineC,
+                hint: "Tanggal (YYYY-MM-DD)",
+                onChanged: (v) => c.deadline.value = v,
+              ),
               const SizedBox(height: 15),
 
               // --- PRIORITAS + SWITCH ---
@@ -59,15 +78,13 @@ class _CreateNewTaskViewState extends State<CreateNewTaskView> {
                       fontFamily: 'Rothek',
                     ),
                   ),
-                  Switch(
-                    value: _isPriority,
-                    activeColor: Colors.blue,
-                    onChanged: (val) {
-                      setState(() {
-                        _isPriority = val;
-                      });
-                    },
-                  ),
+                  Obx(() {
+                    return Switch(
+                      value: c.isPriority.value,
+                      activeColor: Colors.blue,
+                      onChanged: (val) => c.isPriority.value = val,
+                    );
+                  }),
                 ],
               ),
 
@@ -82,37 +99,51 @@ class _CreateNewTaskViewState extends State<CreateNewTaskView> {
                   borderRadius: BorderRadius.circular(14),
                 ),
                 padding: const EdgeInsets.all(12),
-                child: const Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    "Deskripsi Task",
-                    style: TextStyle(color: Colors.white70, fontSize: 14),
+                child: TextField(
+                  controller: descC,
+                  maxLines: null,
+                  onChanged: (v) => c.description.value = v,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: const InputDecoration(
+                    hintText: "Deskripsi Task",
+                    hintStyle: TextStyle(color: Colors.white70, fontSize: 14),
+                    border: InputBorder.none,
                   ),
                 ),
               ),
 
               const SizedBox(height: 35),
 
-              // --- BUTTON ---
-              Container(
-                width: double.infinity,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF5C8BAE),
-                  borderRadius: BorderRadius.circular(22),
-                ),
-                child: const Center(
-                  child: Text(
-                    "Tambahkan Task",
-                    style: TextStyle(
-                      fontFamily: 'Rothek',
-                      color: Colors.white,
-                      fontSize: 17,
-                      fontWeight: FontWeight.w700,
+              // --- BUTTON SUBMIT ---
+              Obx(() {
+                return GestureDetector(
+                  onTap: c.isLoading.value ? null : () => c.submitTask(),
+                  child: Container(
+                    width: double.infinity,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF5C8BAE),
+                      borderRadius: BorderRadius.circular(22),
+                    ),
+                    child: Center(
+                      child:
+                          c.isLoading.value
+                              ? const CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                              : const Text(
+                                "Tambahkan Task",
+                                style: TextStyle(
+                                  fontFamily: 'Rothek',
+                                  color: Colors.white,
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
                     ),
                   ),
-                ),
-              ),
+                );
+              }),
 
               const SizedBox(height: 20),
             ],
@@ -122,8 +153,14 @@ class _CreateNewTaskViewState extends State<CreateNewTaskView> {
     );
   }
 
-  // INPUT BOX
-  Widget _inputBox(String hint) {
+  // -------------------------------------------
+  // CUSTOM INPUT BOX
+  // -------------------------------------------
+  Widget _inputBox({
+    required TextEditingController controller,
+    required String hint,
+    required Function(String) onChanged,
+  }) {
     return Container(
       height: 45,
       decoration: BoxDecoration(
@@ -132,9 +169,15 @@ class _CreateNewTaskViewState extends State<CreateNewTaskView> {
       ),
       padding: const EdgeInsets.symmetric(horizontal: 14),
       alignment: Alignment.centerLeft,
-      child: Text(
-        hint,
-        style: const TextStyle(color: Colors.white70, fontSize: 14),
+      child: TextField(
+        controller: controller,
+        onChanged: onChanged,
+        style: const TextStyle(color: Colors.white),
+        decoration: InputDecoration(
+          hintText: hint,
+          hintStyle: const TextStyle(color: Colors.white70, fontSize: 14),
+          border: InputBorder.none,
+        ),
       ),
     );
   }

@@ -1,10 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../model/task_model.dart';
 import '../../../core/services/api_services.dart';
 
 enum TaskFilter { prioritas, terdekat, semua }
 
-class HomeController extends GetxController {
+class HomeController extends GetxController with WidgetsBindingObserver {
   final api = ApiService();
 
   final isLoading = false.obs;
@@ -14,10 +15,33 @@ class HomeController extends GetxController {
   final searchQuery = "".obs;
   final selectedFilter = TaskFilter.semua.obs;
 
+  // Trigger refresh dari luar
+  final refreshTrigger = false.obs;
+
   @override
   void onInit() {
     super.onInit();
+    WidgetsBinding.instance.addObserver(this);
+
     fetchTasks();
+
+    ever(refreshTrigger, (_) {
+      fetchTasks();
+    });
+  }
+
+  @override
+  void onClose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.onClose();
+  }
+
+  // Dipanggil otomatis ketika kembali ke halaman Home
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      fetchTasks(); // auto refresh ketika kembali
+    }
   }
 
   // ---------------------------------------------------------------------------
@@ -72,12 +96,12 @@ class HomeController extends GetxController {
           }).toList();
     }
 
-    // -- FILTER: Prioritas (is_done == 0 berarti belum selesai)
+    // -- FILTER: Prioritas
     if (selectedFilter.value == TaskFilter.prioritas) {
       list = list.where((t) => t.isPriority == 1).toList();
     }
 
-    // -- FILTER: Terdekat (sort berdasarkan deadline)
+    // -- FILTER: Terdekat (sort deadline)
     if (selectedFilter.value == TaskFilter.terdekat) {
       list = List.from(list)
         ..sort((a, b) => (a.deadline ?? "").compareTo(b.deadline ?? ""));
