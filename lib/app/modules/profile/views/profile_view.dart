@@ -278,8 +278,8 @@ class ProfileView extends GetView<ProfileController> {
                     width: 300,
                     height: 60,
                     child: ElevatedButton(
-                      // onPressed: () => controller.logout(),
-                      onPressed: null,
+                      onPressed: () => controller.logout(),
+                      // onPressed: null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
                         foregroundColor: Colors.white,

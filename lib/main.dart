@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'app/routes/app_pages.dart';
 import 'app/modules/landing_page/views/landing_page_view.dart';
 import 'app/modules/landing_page/bindings/landing_page_binding.dart';
 import 'app/modules/splash_screen/views/splash_screen_view.dart';
 import 'app/modules/splash_screen/bindings/splash_screen_binding.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await GetStorage.init();
   runApp(const MyApp());
 }
 

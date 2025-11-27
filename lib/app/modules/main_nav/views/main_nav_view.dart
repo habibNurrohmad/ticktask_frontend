@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import '../../calendar/views/calendar_view.dart';
 import '../../history/views/history_view.dart';
 import '../../home/views/home_view.dart';
+import '../../home/controllers/home_controller.dart';
 import '../../profile/views/profile_view.dart';
 import '../controllers/main_nav_controller.dart';
 import '../../../core/values/app_colors.dart';
@@ -63,17 +64,27 @@ class MainNavView extends GetView<MainNavController> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     if (index == 0 || index == 1)
-                      _NewTaskButton(
+                        _NewTaskButton(
                         color: newTaskFillColor!, // bg icon & bg teks
                         materialColor:
                             newTaskMaterialColor!, // bg material utama
                         foregroundColor:
                             newTaskForegroundColor!, // warna ikon & teks
-                        onTap: () {
-                          Get.to(
-                            () => const CreateNewTaskView(),
-                            transition: Transition.cupertino,
+                        onTap: () async {
+                          final result = await Navigator.of(context).push<bool?>(
+                            CupertinoPageRoute<bool?>(
+                              builder: (_) => const CreateNewTaskView(),
+                            ),
                           );
+
+                          if (result == true) {
+                            try {
+                              final homeC = Get.find<HomeController>();
+                              await homeC.fetchTasks();
+                            } catch (_) {
+                              // jika controller tidak ditemukan atau fetch gagal, abaikan
+                            }
+                          }
                         },
                       ),
                     if (index == 0 || index == 1) const SizedBox(height: 12),

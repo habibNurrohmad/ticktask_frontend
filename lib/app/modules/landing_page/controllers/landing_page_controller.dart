@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import '../../../routes/app_pages.dart';
 
 class LandingPageController extends GetxController {
@@ -25,7 +26,9 @@ class LandingPageController extends GetxController {
         curve: Curves.easeInOut,
       );
     } else {
-      // Navigasi ke halaman login setelah onboarding selesai
+      // Tandai bahwa user telah melihat landing page, lalu navigasi ke login
+      final box = GetStorage();
+      box.write('seenLanding', true);
       Get.offAllNamed(Routes.LOGIN);
     }
   }

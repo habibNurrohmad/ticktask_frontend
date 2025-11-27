@@ -12,8 +12,12 @@ class TaskDetailController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    final int id = Get.arguments;
-    fetchDetail(id);
+    if (Get.arguments != null) {
+      final args = Get.arguments;
+      if (args is int) {
+        fetchDetail(args);
+      }
+    }
   }
 
   Future<void> fetchDetail(int id) async {
