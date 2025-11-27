@@ -70,6 +70,32 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   }
 
   // ---------------------------------------------------------------------------
+  // DELETE TASK
+  // ---------------------------------------------------------------------------
+  Future<void> deleteTask(int taskId) async {
+    try {
+      isLoading(true);
+
+      final response = await api.deleteTask(taskId);
+
+      if (response.statusCode == 200) {
+        // Hapus task dari list lokal
+        tasks.removeWhere((t) => t.id == taskId);
+        Get.snackbar("Sukses", "Task berhasil dihapus");
+      } else {
+        Get.snackbar(
+          "Error",
+          response.body["message"] ?? "Gagal menghapus task",
+        );
+      }
+    } catch (e) {
+      Get.snackbar("Error", "Tidak dapat menghapus task");
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
   // SEARCH
   // ---------------------------------------------------------------------------
   void setSearchQuery(String value) {
@@ -112,31 +138,33 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     // -- FILTER: Selected Year (if set)
     if (selectedYear.value != null) {
       final y = selectedYear.value!;
-      list = list.where((t) {
-        if (t.deadline == null) return false;
-        try {
-          final dt = DateTime.tryParse(t.deadline!);
-          if (dt == null) return false;
-          return dt.year == y;
-        } catch (_) {
-          return false;
-        }
-      }).toList();
+      list =
+          list.where((t) {
+            if (t.deadline == null) return false;
+            try {
+              final dt = DateTime.tryParse(t.deadline!);
+              if (dt == null) return false;
+              return dt.year == y;
+            } catch (_) {
+              return false;
+            }
+          }).toList();
     }
 
     // -- FILTER: Selected Month (if set)
     if (selectedMonth.value != null) {
       final m = selectedMonth.value!;
-      list = list.where((t) {
-        if (t.deadline == null) return false;
-        try {
-          final dt = DateTime.tryParse(t.deadline!);
-          if (dt == null) return false;
-          return dt.month == m;
-        } catch (_) {
-          return false;
-        }
-      }).toList();
+      list =
+          list.where((t) {
+            if (t.deadline == null) return false;
+            try {
+              final dt = DateTime.tryParse(t.deadline!);
+              if (dt == null) return false;
+              return dt.month == m;
+            } catch (_) {
+              return false;
+            }
+          }).toList();
     }
 
     return list;
