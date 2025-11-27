@@ -47,9 +47,7 @@ class CalendarView extends GetView<CalendarController> {
                   onPageChanged:
                       (focused) => controller.focusedDay.value = focused,
 
-                  // ===============================
-                  //          🔥 TEXT PUTIH
-                  // ===============================
+                  // STYLING
                   headerStyle: const HeaderStyle(
                     titleTextStyle: TextStyle(
                       color: Colors.white,
@@ -186,13 +184,17 @@ Widget _taskCard(CalendarTask data) {
               const SizedBox(height: 8),
               Row(
                 children: [
-                  Text(
-                    data.deadline != null ? "${data.deadline}" : "—",
-                    style: TextStyle(
-                      fontFamily: 'Rothek',
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black.withOpacity(0.6),
+                  Expanded(
+                    child: Text(
+                      data.deadline != null ? "${data.deadline}" : "—",
+                      style: TextStyle(
+                        fontFamily: 'Rothek',
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black.withOpacity(0.6),
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                     ),
                   ),
                   const SizedBox(width: 12),

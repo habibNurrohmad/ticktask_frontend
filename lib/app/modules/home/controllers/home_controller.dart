@@ -87,7 +87,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   // FILTERED LIST (digunakan View)
   // ---------------------------------------------------------------------------
   List<TaskModel> get filteredTasks {
-    List<TaskModel> list = tasks;
+    // Jangan tampilkan task yang sudah selesai (isDone == 1)
+    List<TaskModel> list = tasks.where((t) => t.isDone != 1).toList();
 
     // -- SEARCH --
     if (searchQuery.value.isNotEmpty) {

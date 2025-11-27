@@ -143,8 +143,38 @@ class TaskDetailView extends GetView<TaskDetailController> {
                 // DONE TOGGLE
                 Obx(() {
                   return GestureDetector(
-                    onTap:
-                        () => controller.updateDone(!controller.isDone.value),
+                    onTap: () async {
+                      // Jika belum selesai, tampilkan dialog konfirmasi
+                      if (!controller.isDone.value) {
+                        final confirm = await showDialog<bool>(
+                          context: context,
+                          builder: (ctx) {
+                            return AlertDialog(
+                              title: const Text('Konfirmasi'),
+                              content: const Text(
+                                  'Apakah Anda yakin ingin menandai task ini sebagai selesai?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.of(ctx).pop(false),
+                                  child: const Text('Batal'),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () => Navigator.of(ctx).pop(true),
+                                  child: const Text('Konfirmasi'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+
+                        if (confirm == true) {
+                          controller.updateDone(true);
+                        }
+                      } else {
+                        // Jika sudah selesai, langsung toggle tanpa konfirmasi
+                        controller.updateDone(false);
+                      }
+                    },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16,
@@ -152,10 +182,9 @@ class TaskDetailView extends GetView<TaskDetailController> {
                       ),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
-                        color:
-                            controller.isDone.value
-                                ? Colors.green.shade600
-                                : Colors.grey.shade300,
+                        color: controller.isDone.value
+                            ? Colors.green.shade600
+                            : Colors.grey.shade300,
                       ),
                       child: Row(
                         children: [
@@ -163,10 +192,9 @@ class TaskDetailView extends GetView<TaskDetailController> {
                             controller.isDone.value
                                 ? Icons.check_circle
                                 : Icons.circle_outlined,
-                            color:
-                                controller.isDone.value
-                                    ? Colors.white
-                                    : Colors.black87,
+                            color: controller.isDone.value
+                                ? Colors.white
+                                : Colors.black87,
                           ),
                           const SizedBox(width: 12),
                           Text(
@@ -174,10 +202,9 @@ class TaskDetailView extends GetView<TaskDetailController> {
                                 ? "Task selesai"
                                 : "Tandai sebagai selesai",
                             style: TextStyle(
-                              color:
-                                  controller.isDone.value
-                                      ? Colors.white
-                                      : Colors.black87,
+                              color: controller.isDone.value
+                                  ? Colors.white
+                                  : Colors.black87,
                               fontWeight: FontWeight.w600,
                               fontSize: 16,
                             ),
