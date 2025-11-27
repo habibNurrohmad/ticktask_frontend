@@ -10,6 +10,8 @@ import '../modules/create_new_task/bindings/create_new_task_binding.dart';
 import '../modules/create_new_task/views/create_new_task_view.dart';
 import '../modules/history/bindings/history_binding.dart';
 import '../modules/history/views/history_view.dart';
+import '../modules/history_detail/bindings/history_detail_binding.dart';
+import '../modules/history_detail/views/history_detail_view.dart';
 import '../modules/landing_page/bindings/landing_page_binding.dart';
 import '../modules/landing_page/views/landing_page_view.dart';
 import '../modules/login/bindings/login_binding.dart';
@@ -99,6 +101,11 @@ class AppPages {
       name: _Paths.TASK_DETAIL,
       page: () => const TaskDetailView(),
       binding: TaskDetailBinding(),
+    ),
+    GetPage(
+      name: _Paths.HISTORY_DETAIL,
+      page: () => const HistoryDetailView(),
+      binding: HistoryDetailBinding(),
     ),
   ];
 }

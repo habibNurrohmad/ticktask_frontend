@@ -172,100 +172,103 @@ class HistoryView extends GetView<HistoryController> {
             ? "${item.deadline!.hour}:${item.deadline!.minute.toString().padLeft(2, '0')}"
             : "";
 
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.lightCream,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.06),
-            offset: const Offset(0, 2),
-            blurRadius: 6,
-          ),
-        ],
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  item.title,
-                  style: const TextStyle(
-                    fontFamily: 'Rothek',
-                    fontSize: 20,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.black,
+    return GestureDetector(
+      onTap: () => Get.toNamed('/history-detail', arguments: item.id),
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.lightCream,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.06),
+              offset: const Offset(0, 2),
+              blurRadius: 6,
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.title,
+                    style: const TextStyle(
+                      fontFamily: 'Rothek',
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.black,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Text(
-                      dateLabel,
-                      style: TextStyle(
-                        fontFamily: 'Rothek',
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black.withOpacity(0.6),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Text(
+                        dateLabel,
+                        style: TextStyle(
+                          fontFamily: 'Rothek',
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black.withOpacity(0.6),
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Container(
-                      width: 4,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.4),
-                        shape: BoxShape.circle,
+                      const SizedBox(width: 8),
+                      Container(
+                        width: 4,
+                        height: 4,
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.4),
+                          shape: BoxShape.circle,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      timeLabel,
-                      style: TextStyle(
-                        fontFamily: 'Rothek',
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black.withOpacity(0.6),
+                      const SizedBox(width: 8),
+                      Text(
+                        timeLabel,
+                        style: TextStyle(
+                          fontFamily: 'Rothek',
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black.withOpacity(0.6),
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 12),
-                    Text(
-                      '|',
-                      style: TextStyle(color: Colors.black.withOpacity(0.4)),
-                    ),
-                    const SizedBox(width: 12),
-                    Text(
-                      statusText,
-                      style: TextStyle(
-                        fontFamily: 'Rothek',
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                        color: statusColor,
+                      const SizedBox(width: 12),
+                      Text(
+                        '|',
+                        style: TextStyle(color: Colors.black.withOpacity(0.4)),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                      const SizedBox(width: 12),
+                      Text(
+                        statusText,
+                        style: TextStyle(
+                          fontFamily: 'Rothek',
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                          color: statusColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(width: 12),
-          Container(
-            width: 44,
-            height: 44,
-            decoration: BoxDecoration(
-              color: const Color(0xFFEFEFEF),
-              borderRadius: BorderRadius.circular(10),
+            const SizedBox(width: 12),
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: const Color(0xFFEFEFEF),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Icon(
+                Icons.arrow_forward_ios,
+                size: 18,
+                color: Colors.black,
+              ),
             ),
-            child: const Icon(
-              Icons.arrow_forward_ios,
-              size: 18,
-              color: Colors.black,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
