@@ -47,8 +47,10 @@ class TaskDetailController extends GetxController {
 
     final res = await api.updateTask(task.value!.id, body);
 
-    if (res.statusCode != 200) {
-      // kembalikan kondisi jika gagal
+    if (res.statusCode == 200) {
+      // setelah update sukses → kembali ke Home dengan result TRUE
+      Get.back(result: true);
+    } else {
       isDone.value = !value;
       Get.snackbar("Gagal", "Status tidak dapat diperbarui");
     }
