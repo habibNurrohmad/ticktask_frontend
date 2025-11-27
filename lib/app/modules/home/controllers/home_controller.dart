@@ -52,7 +52,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       isLoading(true);
 
       final response = await api.getTasks();
-      Get.log("TASK RESPONSE => ${response.body}");
+      // Get.log("TASK RESPONSE => ${response.body}");
 
       if (response.statusCode == 200 && response.body['data'] != null) {
         final List data = response.body['data'];
