@@ -5,8 +5,7 @@ import '../controllers/home_controller.dart';
 import '../model/task_model.dart';
 
 class HomeView extends GetView<HomeController> {
-  HomeView({super.key});
-  final controller = Get.put(HomeController());
+  const HomeView({super.key}); // <-- pakai const, hapus Get.put()
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +17,6 @@ class HomeView extends GetView<HomeController> {
           children: [
             const SizedBox(height: 20),
 
-            // --- TITLE ---
             const Center(
               child: Text(
                 "TickTask",
@@ -32,7 +30,6 @@ class HomeView extends GetView<HomeController> {
             ),
             const SizedBox(height: 10),
 
-            // --- SEARCH BAR ---
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Container(
@@ -52,7 +49,6 @@ class HomeView extends GetView<HomeController> {
             ),
             const SizedBox(height: 15),
 
-            // --- FILTER LABEL ---
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Obx(() {
@@ -70,7 +66,6 @@ class HomeView extends GetView<HomeController> {
 
             const SizedBox(height: 20),
 
-            // --- LIST CARD ---
             Expanded(
               child: Obx(() {
                 if (controller.isLoading.value) {
@@ -103,7 +98,7 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  // --- FILTER CHIP ---
+  // FILTER CHIP
   Widget _filterChip(String label, TaskFilter filter) {
     final isSelected = controller.selectedFilter.value == filter;
 
@@ -127,78 +122,84 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  // --- CARD TASK ---
+  // TASK CARD
   Widget _taskCard(TaskModel t) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.lightCream,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // --- TITLE + PRIORITY LABEL ---
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                child: Text(
-                  t.title ?? '',
-                  style: const TextStyle(
-                    fontFamily: 'Rothek',
-                    fontSize: 20,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-              ),
-
-              // LABEL PRIORITAS
-              if (t.isPriority == 1)
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Text(
-                    "PRIORITAS",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
+    return GestureDetector(
+      onTap: () => Get.toNamed('/task-detail', arguments: t.id),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: AppColors.lightCream,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    t.title ?? '',
+                    style: const TextStyle(
+                      fontFamily: 'Rothek',
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,
                     ),
                   ),
                 ),
-            ],
-          ),
+                if (t.isPriority == 1)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Text(
+                      "PRIORITAS",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
 
-          const SizedBox(height: 6),
+            const SizedBox(height: 6),
 
-          Text(
-            t.description ?? '',
-            style: TextStyle(fontSize: 14, color: Colors.black.withOpacity(.7)),
-          ),
-          const SizedBox(height: 10),
+            Text(
+              t.description ?? '',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.black.withOpacity(.7),
+              ),
+            ),
+            const SizedBox(height: 10),
 
-          Row(
-            children: [
-              Icon(Icons.timer, size: 16, color: Colors.black.withOpacity(.7)),
-              const SizedBox(width: 6),
-              Text(
-                t.deadline.toString(),
-                style: TextStyle(
-                  fontSize: 12,
+            Row(
+              children: [
+                Icon(
+                  Icons.timer,
+                  size: 16,
                   color: Colors.black.withOpacity(.7),
                 ),
-              ),
-            ],
-          ),
-        ],
+                const SizedBox(width: 6),
+                Text(
+                  t.deadline.toString(),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.black.withOpacity(.7),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
