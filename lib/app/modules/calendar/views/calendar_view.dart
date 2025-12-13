@@ -47,7 +47,62 @@ class CalendarView extends GetView<CalendarController> {
                   onPageChanged:
                       (focused) => controller.focusedDay.value = focused,
 
+                  // events: memberikan list event untuk setiap tanggal
+                  eventLoader: (day) => controller.getEventsFor(day),
+
                   // STYLING
+                  calendarBuilders: CalendarBuilders(
+                    todayBuilder: (context, day, focusedDay) {
+                      final hasEvent = controller.getEventsFor(day).isNotEmpty;
+                      return Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.white24,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              if (hasEvent)
+                                Container(
+                                  width: 6,
+                                  height: 6,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.mildYellow,
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                              const SizedBox(height: 6),
+                              Text(
+                                '${day.day}',
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                    selectedBuilder: (context, day, focusedDay) {
+                      return Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '${day.day}',
+                                style: const TextStyle(color: Colors.black),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+
                   headerStyle: const HeaderStyle(
                     titleTextStyle: TextStyle(
                       color: Colors.white,
@@ -57,7 +112,7 @@ class CalendarView extends GetView<CalendarController> {
                     ),
                     formatButtonTextStyle: TextStyle(color: Colors.white),
                     formatButtonDecoration: BoxDecoration(
-                      color: Colors.white24,
+                      color: Colors.white12,
                       borderRadius: BorderRadius.all(Radius.circular(12)),
                     ),
                     leftChevronIcon: Icon(
@@ -75,7 +130,7 @@ class CalendarView extends GetView<CalendarController> {
                     weekendStyle: TextStyle(color: Colors.white),
                   ),
 
-                  calendarStyle: const CalendarStyle(
+                  calendarStyle: CalendarStyle(
                     defaultTextStyle: TextStyle(color: Colors.white),
                     weekendTextStyle: TextStyle(color: Colors.white),
                     holidayTextStyle: TextStyle(color: Colors.white),
@@ -91,6 +146,13 @@ class CalendarView extends GetView<CalendarController> {
                       color: Colors.white,
                       shape: BoxShape.circle,
                     ),
+
+                    // Marker (dot) styling for dates that have events
+                    markerDecoration: BoxDecoration(
+                      color: AppColors.mildYellow,
+                      shape: BoxShape.circle,
+                    ),
+                    markerSize: 6.0,
                   ),
                 );
               }),
@@ -107,16 +169,34 @@ class CalendarView extends GetView<CalendarController> {
                 child: Stack(
                   children: [
                     Obx(() {
+                      // Tampilkan hanya tasks yang sudah difilter sesuai tanggal terpilih
+                      final list = controller.filteredTasks;
+
+                      if (list.isEmpty) {
+                        return ListView(
+                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 205),
+                          children: [
+                            SizedBox(height: 24),
+                            Center(
+                              child: Text(
+                                'Tidak ada tugas pada tanggal yang dipilih.',
+                                style: TextStyle(
+                                  fontFamily: 'Rothek',
+                                  fontSize: 16,
+                                  color: Colors.white.withOpacity(0.9),
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+
                       return ListView.separated(
                         padding: const EdgeInsets.fromLTRB(16, 0, 16, 205),
-
-                        // 🔥 tampilkan ALL tasks
-                        itemCount: controller.tasks.length,
-
+                        itemCount: list.length,
                         separatorBuilder: (_, __) => const SizedBox(height: 12),
-
                         itemBuilder: (context, index) {
-                          final data = controller.tasks[index];
+                          final data = list[index];
                           return _taskCard(data);
                         },
                       );
@@ -173,7 +253,7 @@ Widget _taskCard(CalendarTask data) {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                data.title ?? "-",
+                data.title,
                 style: const TextStyle(
                   fontFamily: 'Rothek',
                   fontSize: 20,
