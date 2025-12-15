@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -65,6 +67,30 @@ class ApiService extends GetConnect {
     return getRequest("/user");
   }
 
+  Future<Response> changePassword(Map<String, dynamic> body) {
+    return postRequest("/user/change-password", body);
+  }
+
+  Future<Response> updateFotoProfile(File image) async {
+    final token = storage.read("token");
+
+    final form = FormData({
+      'foto_profile': MultipartFile(
+        image,
+        filename: image.path.split('/').last,
+      ),
+    });
+
+    return post(
+      "$apiBaseUrl/user/foto-profile",
+      form,
+      headers: {
+        "Accept": "application/json",
+        if (token != null) "Authorization": "Bearer $token",
+      },
+    );
+  }
+
   // HISTORY
   Future<Response> getTaskHistory() {
     return getRequest("/tasks/history");
@@ -93,5 +119,13 @@ class ApiService extends GetConnect {
 
   Future<Response> deleteTask(int id) {
     return deleteRequest("/tasks/$id");
+  }
+
+  Future<Response> getNotifications() {
+    return getRequest("/notifications");
+  }
+
+  Future<Response> getNotificationDetail(int id) {
+    return getRequest("/notifications/$id");
   }
 }

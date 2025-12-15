@@ -2,6 +2,7 @@ class UserModel {
   int? id;
   String? name;
   String? email;
+  String? fotoProfile;
   String? emailVerifiedAt;
   String? createdAt;
   String? updatedAt;
@@ -10,6 +11,7 @@ class UserModel {
     this.id,
     this.name,
     this.email,
+    this.fotoProfile,
     this.emailVerifiedAt,
     this.createdAt,
     this.updatedAt,
@@ -20,6 +22,7 @@ class UserModel {
       id: json['id'],
       name: json['name'],
       email: json['email'],
+      fotoProfile: json['foto_profile'],
       emailVerifiedAt: json['email_verified_at'],
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
@@ -30,6 +33,7 @@ class UserModel {
     "id": id,
     "name": name,
     "email": email,
+    "foto_profile": fotoProfile,
     "email_verified_at": emailVerifiedAt,
     "created_at": createdAt,
     "updated_at": updatedAt,
