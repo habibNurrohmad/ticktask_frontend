@@ -86,6 +86,8 @@ class AppPages {
       name: _Paths.NOTIFICATION,
       page: () => const NotificationView(),
       binding: NotificationBinding(),
+      transition: Transition.cupertino,
+      transitionDuration: Duration(milliseconds: 300),
     ),
     GetPage(
       name: _Paths.LOGIN,

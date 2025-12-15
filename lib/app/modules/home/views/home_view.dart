@@ -6,6 +6,10 @@ import '../controllers/home_controller.dart';
 import '../model/task_model.dart';
 import '../../task_detail/controllers/task_detail_controller.dart';
 import '../../task_detail/views/task_detail_view.dart';
+import '../../../routes/app_pages.dart';
+import '../../notification/views/notification_view.dart';
+import '../../notification/bindings/notification_binding.dart';
+import '../../notification/controllers/notification_controller.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key}); // <-- pakai const, hapus Get.put()
@@ -124,7 +128,16 @@ class HomeView extends GetView<HomeController> {
                       shape: BoxShape.circle,
                     ),
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        if (!Get.isRegistered<NotificationController>()) {
+                          NotificationBinding().dependencies();
+                        }
+                        Navigator.of(context).push(
+                          CupertinoPageRoute(
+                            builder: (_) => const NotificationView(),
+                          ),
+                        );
+                      },
                       icon: const Icon(Icons.notifications),
                     ),
                   ),

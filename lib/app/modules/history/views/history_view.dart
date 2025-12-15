@@ -13,67 +13,95 @@ class HistoryView extends GetView<HistoryController> {
     return Scaffold(
       backgroundColor: AppColors.mildYellow,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 20, 16, 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(height: 8),
-              const Center(
-                child: Text(
-                  'History',
-                  style: TextStyle(
-                    fontFamily: 'Rothek',
-                    fontSize: 28,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.white,
-                  ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(height: 8),
+            const Center(
+              child: Text(
+                'History',
+                style: TextStyle(
+                  fontFamily: 'Rothek',
+                  fontSize: 28,
+                  fontWeight: FontWeight.w900,
+                  color: Colors.white,
                 ),
               ),
-              const SizedBox(height: 18),
+            ),
+            const SizedBox(height: 18),
 
-              // Search Bar
-              _searchBar(),
-
-              const SizedBox(height: 14),
-
-              // Filters Row
-              Row(
+            // Search Bar
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 20, 16, 16),
+              child: Column(
                 children: [
-                  _yearFilterChip(context),
-                  const SizedBox(width: 12),
-                  _monthFilterChip(context),
+                  _searchBar(),
+
+                  const SizedBox(height: 14),
+
+                  // Filters Row
+                  Row(
+                    children: [
+                      _yearFilterChip(context),
+                      const SizedBox(width: 12),
+                      _monthFilterChip(context),
+                    ],
+                  ),
                 ],
               ),
+            ),
 
-              const SizedBox(height: 16),
-
-              // LIST DINAMIS
-              Expanded(
-                child: Obx(() {
-                  final list = controller.filtered;
-
-                  if (list.isEmpty) {
-                    return const Center(
-                      child: Text(
-                        "Belum ada history",
-                        style: TextStyle(color: Colors.white),
-                      ),
+            // LIST DINAMIS
+            Expanded(
+              child: Stack(
+                children: [
+                  Obx(() {
+                    final list = controller.filtered;
+              
+                    if (list.isEmpty) {
+                      return Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 8, 16, 125),
+                        child: const Center(
+                          child: Text(
+                            "Belum ada history",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      );
+                    }
+              
+                    return ListView.separated(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 125),
+                      itemCount: list.length,
+                      separatorBuilder: (_, __) => const SizedBox(height: 12),
+                      itemBuilder: (context, index) {
+                        return _historyCard(list[index]);
+                      },
                     );
-                  }
-
-                  return ListView.separated(
-                    padding: const EdgeInsets.only(bottom: 24),
-                    itemCount: list.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 12),
-                    itemBuilder: (context, index) {
-                      return _historyCard(list[index]);
-                    },
-                  );
-                }),
+                  }),
+              
+                  // Overlay gradient dari bawah
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    height: 120,
+                    child: IgnorePointer(
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [Color(0x00000000), Color(0xAA000000)],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -154,9 +182,12 @@ class HistoryView extends GetView<HistoryController> {
   }
 
   void _showYearPicker(BuildContext context) {
-    final data = controller.allData.where((e) =>
-        e.deadline != null &&
-        (controller.selectedMonth.value == null || e.deadline!.month == controller.selectedMonth.value));
+    final data = controller.allData.where(
+      (e) =>
+          e.deadline != null &&
+          (controller.selectedMonth.value == null ||
+              e.deadline!.month == controller.selectedMonth.value),
+    );
 
     final years = data.map((e) => e.deadline!.year).toSet().toList();
 
@@ -164,7 +195,9 @@ class HistoryView extends GetView<HistoryController> {
 
     if (years.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Tidak ada data task untuk memilih tahun')),
+        const SnackBar(
+          content: Text('Tidak ada data task untuk memilih tahun'),
+        ),
       );
       return;
     }
@@ -183,7 +216,7 @@ class HistoryView extends GetView<HistoryController> {
       builder: (ctx) {
         return SafeArea(
           child: SizedBox(
-            height: sheetHeight+10,
+            height: sheetHeight + 10,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -194,7 +227,11 @@ class HistoryView extends GetView<HistoryController> {
                     children: [
                       const Text(
                         'Pilih Tahun',
-                        style: TextStyle(fontFamily: 'Rothek', fontSize: 18, fontWeight: FontWeight.w800),
+                        style: TextStyle(
+                          fontFamily: 'Rothek',
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
                       TextButton(
                         onPressed: () {
@@ -214,7 +251,10 @@ class HistoryView extends GetView<HistoryController> {
                     itemBuilder: (context, index) {
                       final y = years[index];
                       return ListTile(
-                        title: Text(y.toString(), style: const TextStyle(fontFamily: 'Rothek')),
+                        title: Text(
+                          y.toString(),
+                          style: const TextStyle(fontFamily: 'Rothek'),
+                        ),
                         onTap: () {
                           controller.setYear(y);
                           Navigator.of(ctx).pop();
@@ -247,7 +287,7 @@ class HistoryView extends GetView<HistoryController> {
         'September',
         'Oktober',
         'November',
-        'Desember'
+        'Desember',
       ];
 
       final label = m != null ? 'Bulan: ${monthNames[m]}' : 'Bulan';
@@ -302,18 +342,24 @@ class HistoryView extends GetView<HistoryController> {
       'September',
       'Oktober',
       'November',
-      'Desember'
+      'Desember',
     ];
 
-    final data = controller.allData.where((e) => e.deadline != null &&
-        (controller.selectedYear.value == null || e.deadline!.year == controller.selectedYear.value));
+    final data = controller.allData.where(
+      (e) =>
+          e.deadline != null &&
+          (controller.selectedYear.value == null ||
+              e.deadline!.year == controller.selectedYear.value),
+    );
 
     final months = data.map((e) => e.deadline!.month).toSet().toList();
     months.sort((a, b) => b.compareTo(a));
 
     if (months.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Tidak ada data task untuk memilih bulan')),
+        const SnackBar(
+          content: Text('Tidak ada data task untuk memilih bulan'),
+        ),
       );
       return;
     }
@@ -332,7 +378,7 @@ class HistoryView extends GetView<HistoryController> {
       builder: (ctx) {
         return SafeArea(
           child: SizedBox(
-            height: sheetHeight+10,
+            height: sheetHeight + 10,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -343,7 +389,11 @@ class HistoryView extends GetView<HistoryController> {
                     children: [
                       const Text(
                         'Pilih Bulan',
-                        style: TextStyle(fontFamily: 'Rothek', fontSize: 18, fontWeight: FontWeight.w800),
+                        style: TextStyle(
+                          fontFamily: 'Rothek',
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
                       TextButton(
                         onPressed: () {
@@ -363,7 +413,10 @@ class HistoryView extends GetView<HistoryController> {
                     itemBuilder: (context, index) {
                       final m = months[index];
                       return ListTile(
-                        title: Text(monthNames[m], style: const TextStyle(fontFamily: 'Rothek')),
+                        title: Text(
+                          monthNames[m],
+                          style: const TextStyle(fontFamily: 'Rothek'),
+                        ),
                         onTap: () {
                           controller.setMonth(m);
                           Navigator.of(ctx).pop();
