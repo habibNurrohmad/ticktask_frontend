@@ -518,7 +518,6 @@ class HomeView extends GetView<HomeController> {
                     ),
                   );
                 }
-                
 
                 return RefreshIndicator(
                   color: Colors.white,
@@ -677,13 +676,12 @@ class HomeView extends GetView<HomeController> {
                       // contoh: navigasi ke edit (implementasi sesuai kebutuhan)
                       Get.toNamed('/edit-task', arguments: t.id);
                     } else if (v == 2) {
-                      // placeholder: fungsi hapus belum diimplementasikan di controller
-                      Get.snackbar(
-                        'Hapus',
-                        'Fungsi hapus belum diimplementasikan',
-                        backgroundColor: Colors.black.withOpacity(0.6),
-                        colorText: Colors.white,
-                      );
+                      final id = t.id;
+                      if (id == null) {
+                        Get.snackbar('Error', 'Task id kosong');
+                        return;
+                      }
+                      controller.deleteTask(id);
                     }
                   },
                   child: Container(
