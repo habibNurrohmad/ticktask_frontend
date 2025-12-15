@@ -431,13 +431,23 @@ class HomeView extends GetView<HomeController> {
                 }
 
                 if (controller.filteredTasks.isEmpty) {
-                  return const Center(
-                    child: Text(
-                      "Tidak ada task",
-                      style: TextStyle(color: Colors.white),
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "Tidak ada task",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        SizedBox(height: 200),
+                      ],
                     ),
                   );
                 }
+                
 
                 return RefreshIndicator(
                   color: Colors.white,

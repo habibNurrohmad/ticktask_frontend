@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 import 'package:get/get.dart';
 import 'package:ticktask_frontend/app/core/values/app_colors.dart';
 import '../controllers/history_controller.dart';
@@ -39,9 +40,9 @@ class HistoryView extends GetView<HistoryController> {
               // Filters Row
               Row(
                 children: [
-                  _filterChip('Tahun', () => controller.setYear(2025)),
+                  _yearFilterChip(context),
                   const SizedBox(width: 12),
-                  _filterChip('Bulan', () => controller.setMonth(11)),
+                  _monthFilterChip(context),
                 ],
               ),
 
@@ -109,42 +110,273 @@ class HistoryView extends GetView<HistoryController> {
     );
   }
 
-  // ----------------------
-  // FILTER CHIP
-  // ----------------------
-  Widget _filterChip(String label, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.lightCream,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.06),
-              offset: const Offset(0, 2),
-              blurRadius: 4,
-            ),
-          ],
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              label,
-              style: const TextStyle(
-                fontFamily: 'Rothek',
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                color: Colors.black,
+  // (Removed unused generic filter chip helper)
+
+  Widget _yearFilterChip(BuildContext context) {
+    return Obx(() {
+      final year = controller.selectedYear.value;
+      final label = year != null ? 'Tahun: $year' : 'Tahun';
+
+      return GestureDetector(
+        onTap: () => _showYearPicker(context),
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.lightCream,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.06),
+                offset: const Offset(0, 2),
+                blurRadius: 4,
               ),
-            ),
-            const SizedBox(width: 6),
-            const Icon(Icons.arrow_drop_down, size: 20, color: Colors.black),
-          ],
+            ],
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                label,
+                style: const TextStyle(
+                  fontFamily: 'Rothek',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(width: 6),
+              const Icon(Icons.arrow_drop_down, size: 20, color: Colors.black),
+            ],
+          ),
         ),
+      );
+    });
+  }
+
+  void _showYearPicker(BuildContext context) {
+    final data = controller.allData.where((e) =>
+        e.deadline != null &&
+        (controller.selectedMonth.value == null || e.deadline!.month == controller.selectedMonth.value));
+
+    final years = data.map((e) => e.deadline!.year).toSet().toList();
+
+    years.sort((a, b) => b.compareTo(a));
+
+    if (years.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Tidak ada data task untuk memilih tahun')),
+      );
+      return;
+    }
+
+    final itemCount = years.length;
+    final tileHeight = 56.0;
+    final headerHeight = 72.0;
+    final maxHeight = MediaQuery.of(context).size.height * 0.6;
+    final sheetHeight = min(maxHeight, headerHeight + itemCount * tileHeight);
+
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
       ),
+      builder: (ctx) {
+        return SafeArea(
+          child: SizedBox(
+            height: sheetHeight+10,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Pilih Tahun',
+                        style: TextStyle(fontFamily: 'Rothek', fontSize: 18, fontWeight: FontWeight.w800),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          controller.setYear(null);
+                          Navigator.of(ctx).pop();
+                        },
+                        child: const Text('Semua'),
+                      ),
+                    ],
+                  ),
+                ),
+                const Divider(height: 1),
+                Expanded(
+                  child: ListView.separated(
+                    itemCount: years.length,
+                    separatorBuilder: (_, __) => const Divider(height: 1),
+                    itemBuilder: (context, index) {
+                      final y = years[index];
+                      return ListTile(
+                        title: Text(y.toString(), style: const TextStyle(fontFamily: 'Rothek')),
+                        onTap: () {
+                          controller.setYear(y);
+                          Navigator.of(ctx).pop();
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _monthFilterChip(BuildContext context) {
+    return Obx(() {
+      final m = controller.selectedMonth.value;
+      final monthNames = [
+        '',
+        'Januari',
+        'Februari',
+        'Maret',
+        'April',
+        'Mei',
+        'Juni',
+        'Juli',
+        'Agustus',
+        'September',
+        'Oktober',
+        'November',
+        'Desember'
+      ];
+
+      final label = m != null ? 'Bulan: ${monthNames[m]}' : 'Bulan';
+
+      return GestureDetector(
+        onTap: () => _showMonthPicker(context),
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.lightCream,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.06),
+                offset: const Offset(0, 2),
+                blurRadius: 4,
+              ),
+            ],
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                label,
+                style: const TextStyle(
+                  fontFamily: 'Rothek',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(width: 6),
+              const Icon(Icons.arrow_drop_down, size: 20, color: Colors.black),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+
+  void _showMonthPicker(BuildContext context) {
+    final monthNames = [
+      '',
+      'Januari',
+      'Februari',
+      'Maret',
+      'April',
+      'Mei',
+      'Juni',
+      'Juli',
+      'Agustus',
+      'September',
+      'Oktober',
+      'November',
+      'Desember'
+    ];
+
+    final data = controller.allData.where((e) => e.deadline != null &&
+        (controller.selectedYear.value == null || e.deadline!.year == controller.selectedYear.value));
+
+    final months = data.map((e) => e.deadline!.month).toSet().toList();
+    months.sort((a, b) => b.compareTo(a));
+
+    if (months.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Tidak ada data task untuk memilih bulan')),
+      );
+      return;
+    }
+
+    final itemCount = months.length;
+    final tileHeight = 56.0;
+    final headerHeight = 72.0;
+    final maxHeight = MediaQuery.of(context).size.height * 0.6;
+    final sheetHeight = min(maxHeight, headerHeight + itemCount * tileHeight);
+
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+      ),
+      builder: (ctx) {
+        return SafeArea(
+          child: SizedBox(
+            height: sheetHeight+10,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Pilih Bulan',
+                        style: TextStyle(fontFamily: 'Rothek', fontSize: 18, fontWeight: FontWeight.w800),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          controller.setMonth(null);
+                          Navigator.of(ctx).pop();
+                        },
+                        child: const Text('Semua'),
+                      ),
+                    ],
+                  ),
+                ),
+                const Divider(height: 1),
+                Expanded(
+                  child: ListView.separated(
+                    itemCount: months.length,
+                    separatorBuilder: (_, __) => const Divider(height: 1),
+                    itemBuilder: (context, index) {
+                      final m = months[index];
+                      return ListTile(
+                        title: Text(monthNames[m], style: const TextStyle(fontFamily: 'Rothek')),
+                        onTap: () {
+                          controller.setMonth(m);
+                          Navigator.of(ctx).pop();
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 

@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 import '../../../core/services/api_services.dart';
+import 'package:ticktask_frontend/app/modules/home/controllers/home_controller.dart';
+import 'package:ticktask_frontend/app/modules/history/controllers/history_controller.dart';
 import '../model/task_detail_model.dart';
 
 class TaskDetailController extends GetxController {
@@ -52,7 +54,18 @@ class TaskDetailController extends GetxController {
     final res = await api.updateTask(task.value!.id, body);
 
     if (res.statusCode == 200) {
-      // setelah update sukses → kembali ke Home dengan result TRUE
+      // setelah update sukses → refresh daftar dan history jika ini adalah mark-as-done
+      if (value == true) {
+        try {
+          Get.find<HomeController>().fetchTasks();
+        } catch (_) {}
+
+        try {
+          Get.find<HistoryController>().fetchHistory();
+        } catch (_) {}
+      }
+
+      // kembali ke view sebelumnya dengan result TRUE
       Get.back(result: true);
     } else {
       isDone.value = !value;

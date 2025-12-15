@@ -63,6 +63,40 @@ class _CreateNewTaskViewState extends State<CreateNewTaskView> {
                 controller: deadlineC,
                 hint: "Tanggal (YYYY-MM-DD)",
                 onChanged: (v) => c.deadline.value = v,
+                readOnly: true,
+                onTap: () async {
+                  final now = DateTime.now();
+                  final today = DateTime(now.year, now.month, now.day);
+                  DateTime initial = today;
+                  if (deadlineC.text.isNotEmpty) {
+                    try {
+                      final parts = deadlineC.text.split('-');
+                      if (parts.length == 3) {
+                        final y = int.parse(parts[0]);
+                        final m = int.parse(parts[1]);
+                        final d = int.parse(parts[2]);
+                        initial = DateTime(y, m, d);
+                        if (initial.isBefore(today)) initial = today;
+                      }
+                    } catch (_) {
+                      initial = today;
+                    }
+                  }
+
+                  DateTime? picked = await showDatePicker(
+                    context: context,
+                    initialDate: initial,
+                    firstDate: today,
+                    lastDate: DateTime(2100),
+                  );
+                  if (picked != null) {
+                    final formatted = "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
+                    setState(() {
+                      deadlineC.text = formatted;
+                    });
+                    c.deadline.value = formatted;
+                  }
+                },
               ),
               const SizedBox(height: 15),
 
@@ -160,6 +194,8 @@ class _CreateNewTaskViewState extends State<CreateNewTaskView> {
     required TextEditingController controller,
     required String hint,
     required Function(String) onChanged,
+    bool readOnly = false,
+    VoidCallback? onTap,
   }) {
     return Container(
       height: 45,
@@ -172,6 +208,8 @@ class _CreateNewTaskViewState extends State<CreateNewTaskView> {
       child: TextField(
         controller: controller,
         onChanged: onChanged,
+        readOnly: readOnly,
+        onTap: onTap,
         style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(
           hintText: hint,

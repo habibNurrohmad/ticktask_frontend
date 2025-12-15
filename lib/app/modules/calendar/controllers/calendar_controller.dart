@@ -13,6 +13,9 @@ class CalendarController extends GetxController {
   // Task sesuai tanggal terpilih
   var filteredTasks = <CalendarTask>[].obs;
 
+  // Map tanggal -> list tugas (dipakai untuk menandai tanggal di calendar)
+  var events = <DateTime, List<CalendarTask>>{}.obs;
+
   // Calendar states
   final focusedDay = DateTime.now().obs;
   final selectedDay = Rx<DateTime?>(DateTime.now());
@@ -38,7 +41,8 @@ class CalendarController extends GetxController {
 
       if (rawData is List) {
         tasks.value = rawData.map((e) => CalendarTask.fromJson(e)).toList();
-        filterBySelectedDay();
+          filterBySelectedDay();
+          buildEventMap();
       } else {
         print("rawData is not a List: ${rawData.runtimeType}");
         tasks.clear();
@@ -74,5 +78,30 @@ class CalendarController extends GetxController {
 
           return d.year == day.year && d.month == day.month && d.day == day.day;
         }).toList();
+  }
+
+  // ----------------------------------------------------------
+  // BUILD EVENT MAP
+  // ----------------------------------------------------------
+  void buildEventMap() {
+    events.clear();
+
+    for (final task in tasks) {
+      if (task.deadline == null) continue;
+
+      final key = DateTime(task.deadline!.year, task.deadline!.month, task.deadline!.day);
+
+      if (!events.containsKey(key)) {
+        events[key] = [];
+      }
+
+      events[key]!.add(task);
+    }
+  }
+
+  // Returns list of tasks for a specific day (used by TableCalendar.eventLoader)
+  List<CalendarTask> getEventsFor(DateTime day) {
+    final key = DateTime(day.year, day.month, day.day);
+    return events[key] ?? [];
   }
 }
