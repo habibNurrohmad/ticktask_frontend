@@ -53,6 +53,7 @@ class ProfileController extends GetxController {
 
       if (response.statusCode == 200) {
         user.value = UserModel.fromJson(response.body['user']);
+        _setAvatarFromUrl(user.value.fotoProfile, force: true);
       } else {
         Get.snackbar("Error", response.body["message"] ?? "Gagal memuat data");
       }
@@ -61,6 +62,38 @@ class ProfileController extends GetxController {
     } finally {
       isLoading(false);
     }
+  }
+
+  void _setAvatarFromUrl(String? url, {bool force = false}) {
+    if (url == null || url.isEmpty) {
+      if (force) {
+        avatarImageProvider.value = null;
+      }
+      return;
+    }
+
+    final normalizedUrl = _normalizeFotoUrl(url);
+    final token = box.read<String>('token');
+
+    avatarImageProvider.value = NetworkImage(
+      normalizedUrl,
+      headers:
+          token != null
+              ? {'Accept': 'application/json', 'Authorization': 'Bearer $token'}
+              : null,
+    );
+  }
+
+  String _normalizeFotoUrl(String url) {
+    if (url.startsWith('http://127.0.0.1')) {
+      return url.replaceFirst('http://127.0.0.1', 'http://10.0.2.2');
+    }
+    return url;
+  }
+
+  void handleAvatarImageError(Object exception, StackTrace? stackTrace) {
+    avatarImageProvider.value = null;
+    Get.log('Avatar image failed: $exception');
   }
 
   //           LOGOUT

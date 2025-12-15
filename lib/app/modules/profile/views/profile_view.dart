@@ -77,8 +77,15 @@ class ProfileView extends GetView<ProfileController> {
                   clipBehavior: Clip.none,
                   children: [
                     // Ring luar
-                    Obx(
-                      () => Container(
+                    Obx(() {
+                      final fotoUrl = controller.user.value.fotoProfile;
+                      final imageProvider =
+                          controller.avatarImageProvider.value ??
+                          (fotoUrl != null && fotoUrl.isNotEmpty
+                              ? NetworkImage(fotoUrl)
+                              : null);
+
+                      return Container(
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           boxShadow: [
@@ -95,10 +102,9 @@ class ProfileView extends GetView<ProfileController> {
                           child: CircleAvatar(
                             radius: 76,
                             backgroundColor: Colors.white,
-                            backgroundImage:
-                                controller.avatarImageProvider.value,
+                            backgroundImage: imageProvider,
                             child:
-                                controller.avatarImageProvider.value == null
+                                imageProvider == null
                                     ? const Icon(
                                       Icons.person,
                                       size: 72,
@@ -107,8 +113,8 @@ class ProfileView extends GetView<ProfileController> {
                                     : null,
                           ),
                         ),
-                      ),
-                    ),
+                      );
+                    }),
                     // Tombol kamera
                     Positioned(
                       right: 0,
