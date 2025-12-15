@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart'; // tambahkan untuk CupertinoPageRoute
 import 'package:get/get.dart';
 import 'package:ticktask_frontend/app/core/values/app_colors.dart';
 import 'package:ticktask_frontend/app/modules/about/views/about_view.dart';
-import 'package:ticktask_frontend/app/modules/change_password/views/change_password_view.dart';
+import 'package:ticktask_frontend/app/routes/app_pages.dart';
 
 import '../controllers/profile_controller.dart';
 
@@ -239,11 +239,7 @@ class ProfileView extends GetView<ProfileController> {
                     child: InkWell(
                       borderRadius: BorderRadius.circular(16),
                       onTap: () {
-                        Navigator.of(context).push(
-                          CupertinoPageRoute(
-                            builder: (_) => ChangePasswordView(),
-                          ),
-                        );
+                        Get.toNamed(Routes.CHANGE_PASSWORD);
                       },
                       child: const SizedBox(
                         width: 300,
