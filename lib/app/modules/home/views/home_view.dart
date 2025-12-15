@@ -63,19 +63,20 @@ class HomeView extends GetView<HomeController> {
                             borderRadius: BorderRadius.circular(40),
                           ),
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 6),
+                            horizontal: 20,
+                            vertical: 6,
+                          ),
                           child: Row(
                             children: [
                               Expanded(
                                 child: TextField(
                                   onChanged: controller.setSearchQuery,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                  ),
+                                  style: const TextStyle(color: Colors.black),
                                   decoration: const InputDecoration(
                                     isDense: true,
-                                    contentPadding:
-                                        EdgeInsets.symmetric(vertical: 12),
+                                    contentPadding: EdgeInsets.symmetric(
+                                      vertical: 12,
+                                    ),
                                     hintText: 'Search by keywords',
                                     border: InputBorder.none,
                                   ),
@@ -100,7 +101,7 @@ class HomeView extends GetView<HomeController> {
                                   color: Colors.black.withOpacity(0.15),
                                   blurRadius: 6,
                                   offset: const Offset(0, 3),
-                                )
+                                ),
                               ],
                             ),
                             child: IconButton(
@@ -159,9 +160,7 @@ class HomeView extends GetView<HomeController> {
                       child: _filterChip("Terdekat", TaskFilter.terdekat),
                     ),
                     const SizedBox(width: 10),
-                    Expanded(
-                      child: _filterChip("Semua", TaskFilter.semua),
-                    ),
+                    Expanded(child: _filterChip("Semua", TaskFilter.semua)),
                   ],
                 );
               }),
@@ -170,7 +169,8 @@ class HomeView extends GetView<HomeController> {
             const SizedBox(height: 14),
 
             Obx(() {
-              final showCalendar = controller.selectedFilter.value == TaskFilter.semua;
+              final showCalendar =
+                  controller.selectedFilter.value == TaskFilter.semua;
               final monthNames = const [
                 '',
                 'Januari',
@@ -184,7 +184,7 @@ class HomeView extends GetView<HomeController> {
                 'September',
                 'Oktober',
                 'November',
-                'Desember'
+                'Desember',
               ];
 
               return AnimatedSwitcher(
@@ -201,235 +201,293 @@ class HomeView extends GetView<HomeController> {
                     ),
                   );
                 },
-                child: showCalendar
-                    ? Padding(
-                        key: const ValueKey('calendarRow'),
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                // Tahun
-                                Expanded(
-                                  child: GestureDetector(
-                                    onTap: () async {
-                                      final years = controller.availableYears;
-                                      await showModalBottomSheet<void>(
-                                        context: context,
-                                        shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.vertical(
-                                              top: Radius.circular(16)),
-                                        ),
-                                        builder: (ctx) {
-                                          return SafeArea(
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Padding(
-                                                  padding: const EdgeInsets.all(16),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.spaceBetween,
-                                                    children: [
-                                                      const Text(
-                                                        'Pilih Tahun',
-                                                        style: TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight: FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          controller.setSelectedYear(
-                                                              null);
-                                                          Navigator.pop(ctx);
-                                                        },
-                                                        child: const Text('Semua'),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                                const Divider(height: 1),
-                                                if (years.isEmpty)
+                child:
+                    showCalendar
+                        ? Padding(
+                          key: const ValueKey('calendarRow'),
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  // Tahun
+                                  Expanded(
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        final years = controller.availableYears;
+                                        await showModalBottomSheet<void>(
+                                          context: context,
+                                          shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.vertical(
+                                              top: Radius.circular(16),
+                                            ),
+                                          ),
+                                          builder: (ctx) {
+                                            return SafeArea(
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
                                                   Padding(
-                                                    padding: const EdgeInsets.all(20),
-                                                    child: Text(
-                                                      'Tidak ada tahun tersedia',
-                                                      style: TextStyle(
-                                                        color: Colors.black
-                                                            .withOpacity(.6),
-                                                      ),
-                                                    ),
-                                                  )
-                                                else
-                                                  Flexible(
-                                                    child: ListView.builder(
-                                                      shrinkWrap: true,
-                                                      itemCount: years.length,
-                                                      itemBuilder: (_, i) {
-                                                        final y = years[i];
-                                                        return ListTile(
-                                                          title: Text(y.toString()),
-                                                          onTap: () {
-                                                            controller.setSelectedYear(y);
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                          16,
+                                                        ),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        const Text(
+                                                          'Pilih Tahun',
+                                                          style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            controller
+                                                                .setSelectedYear(
+                                                                  null,
+                                                                );
                                                             Navigator.pop(ctx);
                                                           },
-                                                        );
-                                                      },
+                                                          child: const Text(
+                                                            'Semua',
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
-                                                const SizedBox(height: 12),
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                      );
-                                    },
-                                    child: Container(
-                                      height: 45,
-                                      padding:
-                                          const EdgeInsets.symmetric(horizontal: 14),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.lightCream,
-                                        borderRadius: BorderRadius.circular(14),
-                                      ),
-                                      child: Center(
-                                        child: Obx(() {
-                                          final sel = controller.selectedYear.value;
-                                          return Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              const Icon(
-                                                Icons.calendar_today,
-                                                size: 20,
+                                                  const Divider(height: 1),
+                                                  if (years.isEmpty)
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                            20,
+                                                          ),
+                                                      child: Text(
+                                                        'Tidak ada tahun tersedia',
+                                                        style: TextStyle(
+                                                          color: Colors.black
+                                                              .withOpacity(.6),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  else
+                                                    Flexible(
+                                                      child: ListView.builder(
+                                                        shrinkWrap: true,
+                                                        itemCount: years.length,
+                                                        itemBuilder: (_, i) {
+                                                          final y = years[i];
+                                                          return ListTile(
+                                                            title: Text(
+                                                              y.toString(),
+                                                            ),
+                                                            onTap: () {
+                                                              controller
+                                                                  .setSelectedYear(
+                                                                    y,
+                                                                  );
+                                                              Navigator.pop(
+                                                                ctx,
+                                                              );
+                                                            },
+                                                          );
+                                                        },
+                                                      ),
+                                                    ),
+                                                  const SizedBox(height: 12),
+                                                ],
                                               ),
-                                              const SizedBox(width: 8),
-                                              Text(sel == null ? 'Semua Tahun' : sel.toString()),
-                                            ],
-                                          );
-                                        }),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: Container(
+                                        height: 45,
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 14,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.lightCream,
+                                          borderRadius: BorderRadius.circular(
+                                            14,
+                                          ),
+                                        ),
+                                        child: Center(
+                                          child: Obx(() {
+                                            final sel =
+                                                controller.selectedYear.value;
+                                            return Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                const Icon(
+                                                  Icons.calendar_today,
+                                                  size: 20,
+                                                ),
+                                                const SizedBox(width: 8),
+                                                Text(
+                                                  sel == null
+                                                      ? 'Semua Tahun'
+                                                      : sel.toString(),
+                                                ),
+                                              ],
+                                            );
+                                          }),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                const SizedBox(width: 12),
-                            
-                                // Bulan
-                                Expanded(
-                                  child: GestureDetector(
-                                    onTap: () async {
-                                      final months = controller
-                                          .availableMonths(controller.selectedYear.value);
-                                      await showModalBottomSheet<void>(
-                                        context: context,
-                                        shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.vertical(
-                                              top: Radius.circular(16)),
-                                        ),
-                                        builder: (ctx) {
-                                          return SafeArea(
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Padding(
-                                                  padding: const EdgeInsets.all(16),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.spaceBetween,
-                                                    children: [
-                                                      const Text(
-                                                        'Pilih Bulan',
-                                                        style: TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight: FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          controller.setSelectedMonth(
-                                                              null);
-                                                          Navigator.pop(ctx);
-                                                        },
-                                                        child: const Text('Semua'),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                                const Divider(height: 1),
-                                                if (months.isEmpty)
+                                  const SizedBox(width: 12),
+
+                                  // Bulan
+                                  Expanded(
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        final months = controller
+                                            .availableMonths(
+                                              controller.selectedYear.value,
+                                            );
+                                        await showModalBottomSheet<void>(
+                                          context: context,
+                                          shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.vertical(
+                                              top: Radius.circular(16),
+                                            ),
+                                          ),
+                                          builder: (ctx) {
+                                            return SafeArea(
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
                                                   Padding(
-                                                    padding: const EdgeInsets.all(20),
-                                                    child: Text(
-                                                      'Tidak ada bulan tersedia',
-                                                      style: TextStyle(
-                                                        color: Colors.black
-                                                            .withOpacity(.6),
-                                                      ),
-                                                    ),
-                                                  )
-                                                else
-                                                  Flexible(
-                                                    child: ListView.builder(
-                                                      shrinkWrap: true,
-                                                      itemCount: months.length,
-                                                      itemBuilder: (_, i) {
-                                                        final m = months[i];
-                                                        return ListTile(
-                                                          title: Text(monthNames[m]),
-                                                          onTap: () {
-                                                            controller.setSelectedMonth(m);
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                          16,
+                                                        ),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        const Text(
+                                                          'Pilih Bulan',
+                                                          style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            controller
+                                                                .setSelectedMonth(
+                                                                  null,
+                                                                );
                                                             Navigator.pop(ctx);
                                                           },
-                                                        );
-                                                      },
+                                                          child: const Text(
+                                                            'Semua',
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
-                                                const SizedBox(height: 12),
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                      );
-                                    },
-                                    child: Container(
-                                      height: 45,
-                                      padding:
-                                          const EdgeInsets.symmetric(horizontal: 14),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.lightCream,
-                                        borderRadius: BorderRadius.circular(14),
-                                      ),
-                                      child: Center(
-                                        child: Obx(() {
-                                          final sel = controller.selectedMonth.value;
-                                          return Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              const Icon(
-                                                Icons.date_range,
-                                                size: 20,
+                                                  const Divider(height: 1),
+                                                  if (months.isEmpty)
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                            20,
+                                                          ),
+                                                      child: Text(
+                                                        'Tidak ada bulan tersedia',
+                                                        style: TextStyle(
+                                                          color: Colors.black
+                                                              .withOpacity(.6),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  else
+                                                    Flexible(
+                                                      child: ListView.builder(
+                                                        shrinkWrap: true,
+                                                        itemCount:
+                                                            months.length,
+                                                        itemBuilder: (_, i) {
+                                                          final m = months[i];
+                                                          return ListTile(
+                                                            title: Text(
+                                                              monthNames[m],
+                                                            ),
+                                                            onTap: () {
+                                                              controller
+                                                                  .setSelectedMonth(
+                                                                    m,
+                                                                  );
+                                                              Navigator.pop(
+                                                                ctx,
+                                                              );
+                                                            },
+                                                          );
+                                                        },
+                                                      ),
+                                                    ),
+                                                  const SizedBox(height: 12),
+                                                ],
                                               ),
-                                              const SizedBox(width: 8),
-                                              Text(sel == null
-                                                  ? 'Semua Bulan'
-                                                  : monthNames[sel]),
-                                            ],
-                                          );
-                                        }),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: Container(
+                                        height: 45,
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 14,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.lightCream,
+                                          borderRadius: BorderRadius.circular(
+                                            14,
+                                          ),
+                                        ),
+                                        child: Center(
+                                          child: Obx(() {
+                                            final sel =
+                                                controller.selectedMonth.value;
+                                            return Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                const Icon(
+                                                  Icons.date_range,
+                                                  size: 20,
+                                                ),
+                                                const SizedBox(width: 8),
+                                                Text(
+                                                  sel == null
+                                                      ? 'Semua Bulan'
+                                                      : monthNames[sel],
+                                                ),
+                                              ],
+                                            );
+                                          }),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 10)
-                          ],
+                                ],
+                              ),
+                              SizedBox(height: 10),
+                            ],
+                          ),
+                        )
+                        : const SizedBox(
+                          key: ValueKey('calendarEmpty'),
+                          height: 0,
                         ),
-                      )
-                    : const SizedBox(
-                        key: ValueKey('calendarEmpty'),
-                        height: 0,
-                      ),
               );
             }),
 
@@ -548,10 +606,7 @@ class HomeView extends GetView<HomeController> {
         child: Text(
           label,
           textAlign: TextAlign.center,
-          style: TextStyle(
-            color: textColor,
-            fontWeight: FontWeight.w700,
-          ),
+          style: TextStyle(color: textColor, fontWeight: FontWeight.w700),
         ),
       ),
     );
@@ -604,27 +659,31 @@ class HomeView extends GetView<HomeController> {
                     ),
                   ),
                 ),
-                // moved PRIORITAS label next to the deadline container below
 
+                // moved PRIORITAS label next to the deadline container below
                 const SizedBox(width: 8),
 
                 // Small three-dots box button at top-right of the task card
                 PopupMenuButton<int>(
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
-                  itemBuilder: (ctx) => const [
-                    PopupMenuItem(value: 1, child: Text('Edit')),
-                    PopupMenuItem(value: 2, child: Text('Hapus')),
-                  ],
+                  itemBuilder:
+                      (ctx) => const [
+                        PopupMenuItem(value: 1, child: Text('Edit')),
+                        PopupMenuItem(value: 2, child: Text('Hapus')),
+                      ],
                   onSelected: (v) {
                     if (v == 1) {
                       // contoh: navigasi ke edit (implementasi sesuai kebutuhan)
-                      Get.toNamed('/task-edit', arguments: t.id);
+                      Get.toNamed('/edit-task', arguments: t.id);
                     } else if (v == 2) {
                       // placeholder: fungsi hapus belum diimplementasikan di controller
-                      Get.snackbar('Hapus', 'Fungsi hapus belum diimplementasikan',
-                          backgroundColor: Colors.black.withOpacity(0.6),
-                          colorText: Colors.white);
+                      Get.snackbar(
+                        'Hapus',
+                        'Fungsi hapus belum diimplementasikan',
+                        backgroundColor: Colors.black.withOpacity(0.6),
+                        colorText: Colors.white,
+                      );
                     }
                   },
                   child: Container(
@@ -661,7 +720,10 @@ class HomeView extends GetView<HomeController> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.black,
                     borderRadius: BorderRadius.circular(8),
@@ -669,11 +731,7 @@ class HomeView extends GetView<HomeController> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(
-                        Icons.timer,
-                        size: 16,
-                        color: Colors.white,
-                      ),
+                      Icon(Icons.timer, size: 16, color: Colors.white),
                       const SizedBox(width: 6),
                       Text(
                         t.deadline.toString(),
