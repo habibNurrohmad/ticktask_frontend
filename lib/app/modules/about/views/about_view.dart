@@ -10,28 +10,34 @@ class AboutView extends GetView<AboutController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xffFFFDEB),
-      appBar: AppBar(
-        backgroundColor: const Color(0xffFFFDEB),
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_new,
-            color: Colors.black,
-            size: 22,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight + 30),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 30),
+          child: AppBar(
+            backgroundColor: const Color(0xffFFFDEB),
+            elevation: 0,
+            leading: IconButton(
+              icon: const Icon(
+                Icons.arrow_back_ios_new,
+                color: Colors.black,
+                size: 22,
+              ),
+              onPressed: () => Get.back(),
+            ),
+            title: const Text(
+              "About",
+              style: TextStyle(
+                fontFamily: 'Rhotek', // Font Rhotek
+                color: Colors.black,
+                fontSize: 22,
+                fontWeight: FontWeight.w700, // semi-bold
+                letterSpacing: 0.3,
+              ),
+            ),
+            centerTitle: true,
           ),
-          onPressed: () => Get.back(),
         ),
-        title: const Text(
-          "About",
-          style: TextStyle(
-            fontFamily: 'Rhotek', // Font Rhotek
-            color: Colors.black,
-            fontSize: 22,
-            fontWeight: FontWeight.w700, // semi-bold
-            letterSpacing: 0.3,
-          ),
-        ),
-        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
