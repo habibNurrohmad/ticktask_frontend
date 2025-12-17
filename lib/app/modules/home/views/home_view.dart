@@ -6,7 +6,6 @@ import '../controllers/home_controller.dart';
 import '../model/task_model.dart';
 import '../../task_detail/controllers/task_detail_controller.dart';
 import '../../task_detail/views/task_detail_view.dart';
-import '../../../routes/app_pages.dart';
 import '../../notification/views/notification_view.dart';
 import '../../notification/bindings/notification_binding.dart';
 import '../../notification/controllers/notification_controller.dart';
