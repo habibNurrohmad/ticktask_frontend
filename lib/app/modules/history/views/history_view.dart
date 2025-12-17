@@ -16,13 +16,13 @@ class HistoryView extends GetView<HistoryController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const SizedBox(height: 8),
+            const SizedBox(height: 30),
             const Center(
               child: Text(
                 'History',
                 style: TextStyle(
                   fontFamily: 'Rothek',
-                  fontSize: 28,
+                  fontSize: 32,
                   fontWeight: FontWeight.w900,
                   color: Colors.white,
                 ),
