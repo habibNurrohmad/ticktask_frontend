@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart'; // tambahkan untuk CupertinoPageRoute
 import 'package:get/get.dart';
 import 'package:ticktask_frontend/app/core/values/app_colors.dart';
 import 'package:ticktask_frontend/app/modules/about/views/about_view.dart';
-import 'package:ticktask_frontend/app/modules/change_password/views/change_password_view.dart';
+import 'package:ticktask_frontend/app/routes/app_pages.dart';
 
 import '../controllers/profile_controller.dart';
 
@@ -77,8 +77,15 @@ class ProfileView extends GetView<ProfileController> {
                   clipBehavior: Clip.none,
                   children: [
                     // Ring luar
-                    Obx(
-                      () => Container(
+                    Obx(() {
+                      final fotoUrl = controller.user.value.fotoProfile;
+                      final imageProvider =
+                          controller.avatarImageProvider.value ??
+                          (fotoUrl != null && fotoUrl.isNotEmpty
+                              ? NetworkImage(fotoUrl)
+                              : null);
+
+                      return Container(
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           boxShadow: [
@@ -95,10 +102,9 @@ class ProfileView extends GetView<ProfileController> {
                           child: CircleAvatar(
                             radius: 76,
                             backgroundColor: Colors.white,
-                            backgroundImage:
-                                controller.avatarImageProvider.value,
+                            backgroundImage: imageProvider,
                             child:
-                                controller.avatarImageProvider.value == null
+                                imageProvider == null
                                     ? const Icon(
                                       Icons.person,
                                       size: 72,
@@ -107,8 +113,8 @@ class ProfileView extends GetView<ProfileController> {
                                     : null,
                           ),
                         ),
-                      ),
-                    ),
+                      );
+                    }),
                     // Tombol kamera
                     Positioned(
                       right: 0,
@@ -233,11 +239,7 @@ class ProfileView extends GetView<ProfileController> {
                     child: InkWell(
                       borderRadius: BorderRadius.circular(16),
                       onTap: () {
-                        Navigator.of(context).push(
-                          CupertinoPageRoute(
-                            builder: (_) => ChangePasswordView(),
-                          ),
-                        );
+                        Get.toNamed(Routes.CHANGE_PASSWORD);
                       },
                       child: const SizedBox(
                         width: 300,

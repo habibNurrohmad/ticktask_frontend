@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/EditTask/bindings/edit_task_binding.dart';
+import '../modules/EditTask/views/edit_task_view.dart';
 import '../modules/about/bindings/about_binding.dart';
 import '../modules/about/views/about_view.dart';
 import '../modules/calendar/bindings/calendar_binding.dart';
@@ -108,6 +110,11 @@ class AppPages {
       name: _Paths.HISTORY_DETAIL,
       page: () => const HistoryDetailView(),
       binding: HistoryDetailBinding(),
+    ),
+    GetPage(
+      name: _Paths.EDIT_TASK,
+      page: () => const EditTaskView(),
+      binding: EditTaskBinding(),
     ),
   ];
 }
