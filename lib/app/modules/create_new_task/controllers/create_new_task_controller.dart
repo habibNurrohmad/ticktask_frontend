@@ -26,6 +26,11 @@ class CreateNewTaskController extends GetxController {
       return;
     }
 
+    if (deadline.value.trim().isEmpty) {
+      Get.snackbar("Gagal", "Tanggal tidak boleh kosong");
+      return;
+    }
+
     isLoading(true);
 
     final body = {

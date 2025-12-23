@@ -69,7 +69,9 @@ class EditTaskController extends GetxController {
             await Get.find<HomeController>().fetchTasks();
           }
         } catch (_) {}
-
+        // show success message before navigating away
+        Get.snackbar("Berhasil", "Task berhasil diperbarui");
+        await Future.delayed(const Duration(milliseconds: 500));
         // navigate back to Home and rebuild tabs
         Get.offAllNamed(Routes.HOME);
       } else {

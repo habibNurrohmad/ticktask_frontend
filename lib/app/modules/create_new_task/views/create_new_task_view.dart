@@ -17,6 +17,17 @@ class _CreateNewTaskViewState extends State<CreateNewTaskView> {
   final descC = TextEditingController();
 
   @override
+  void dispose() {
+    titleC.dispose();
+    deadlineC.dispose();
+    descC.dispose();
+    if (Get.isRegistered<CreateNewTaskController>()) {
+      Get.delete<CreateNewTaskController>();
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xffFCFEE8),
@@ -97,7 +108,8 @@ class _CreateNewTaskViewState extends State<CreateNewTaskView> {
                     lastDate: DateTime(2100),
                   );
                   if (picked != null) {
-                    final formatted = "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
+                    final formatted =
+                        "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
                     setState(() {
                       deadlineC.text = formatted;
                     });
@@ -157,30 +169,38 @@ class _CreateNewTaskViewState extends State<CreateNewTaskView> {
 
               // --- BUTTON SUBMIT ---
               Obx(() {
+                final isValid =
+                    c.title.value.trim().isNotEmpty &&
+                    c.deadline.value.trim().isNotEmpty;
+                final isDisabled = c.isLoading.value || !isValid;
+
                 return GestureDetector(
-                  onTap: c.isLoading.value ? null : () => c.submitTask(),
-                  child: Container(
-                    width: double.infinity,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF5C8BAE),
-                      borderRadius: BorderRadius.circular(22),
-                    ),
-                    child: Center(
-                      child:
-                          c.isLoading.value
-                              ? const CircularProgressIndicator(
-                                color: Colors.white,
-                              )
-                              : const Text(
-                                "Tambahkan Task",
-                                style: TextStyle(
-                                  fontFamily: 'Rothek',
+                  onTap: isDisabled ? null : () => c.submitTask(),
+                  child: Opacity(
+                    opacity: isDisabled ? 0.6 : 1,
+                    child: Container(
+                      width: double.infinity,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF5C8BAE),
+                        borderRadius: BorderRadius.circular(22),
+                      ),
+                      child: Center(
+                        child:
+                            c.isLoading.value
+                                ? const CircularProgressIndicator(
                                   color: Colors.white,
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w700,
+                                )
+                                : const Text(
+                                  "Tambahkan Task",
+                                  style: TextStyle(
+                                    fontFamily: 'Rothek',
+                                    color: Colors.white,
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
-                              ),
+                      ),
                     ),
                   ),
                 );

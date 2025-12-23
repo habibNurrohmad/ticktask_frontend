@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../core/values/app_colors.dart';
 import '../controllers/change_password_controller.dart';
 
 class ChangePasswordView extends GetView<ChangePasswordController> {
@@ -63,7 +62,7 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
               ),
               const SizedBox(height: 20),
               _PasswordField(
-                hint: 'Password Baru',
+                hint: 'Ulangi Password Baru',
                 controller: controller.confirmPasswordController,
                 validator: controller.validateConfirmPassword,
                 obscureText: controller.isObscureConfirm,
@@ -161,6 +160,8 @@ class _PasswordField extends StatelessWidget {
           ),
           textAlign: TextAlign.center,
           decoration: InputDecoration(
+            // Hide error text to avoid layout jump; we use snackbars instead
+            errorStyle: const TextStyle(height: 0, fontSize: 0),
             hintText: hint,
             hintStyle: const TextStyle(
               fontFamily: 'Rothek',
@@ -173,6 +174,15 @@ class _PasswordField extends StatelessWidget {
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 20,
               vertical: 16,
+            ),
+            suffixIcon: IconButton(
+              onPressed: () => obscureText.value = !obscureText.value,
+              icon: Icon(
+                obscureText.value ? Icons.visibility_off : Icons.visibility,
+                color: Colors.white,
+                size: 20,
+              ),
+              splashRadius: 20,
             ),
           ),
         ),

@@ -34,30 +34,36 @@ class ChangePasswordController extends GetxController {
 
   String? validateCurrentPassword(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Masukkan password saat ini';
+      Get.snackbar('Peringatan', 'Masukkan password saat ini');
+      return '';
     }
     return null;
   }
 
   String? validateNewPassword(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Masukkan password baru';
+      Get.snackbar('Peringatan', 'Masukkan password baru');
+      return '';
     }
     if (value.length < 8) {
-      return 'Password minimal 8 karakter';
+      Get.snackbar('Peringatan', 'Password minimal 8 karakter');
+      return '';
     }
     if (value == currentPasswordController.text) {
-      return 'Password baru tidak boleh sama';
+      Get.snackbar('Peringatan', 'Password baru tidak boleh sama');
+      return '';
     }
     return null;
   }
 
   String? validateConfirmPassword(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Konfirmasi password baru';
+      Get.snackbar('Peringatan', 'Konfirmasi password baru');
+      return '';
     }
     if (value != newPasswordController.text) {
-      return 'Konfirmasi password tidak sama';
+      Get.snackbar('Peringatan', 'Konfirmasi password tidak sama');
+      return '';
     }
     return null;
   }

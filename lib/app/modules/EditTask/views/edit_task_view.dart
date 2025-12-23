@@ -24,148 +24,149 @@ class EditTaskView extends GetView<EditTaskController> {
         'September',
         'Oktober',
         'November',
-        'Desember'
+        'Desember',
       ];
       return "${dt.day} ${months[dt.month - 1]} ${dt.year}";
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xffFCFEE8),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(kToolbarHeight + 30),
-        child: Padding(
-          padding: const EdgeInsets.only(top: 30),
-          child: AppBar(
-            backgroundColor: const Color(0xffFCFEE8),
-            elevation: 0,
-            leading: IconButton(
-              icon: const Icon(
-                Icons.arrow_back_ios_new,
-                color: Colors.black,
-                size: 22,
+        backgroundColor: const Color(0xffFCFEE8),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(kToolbarHeight + 30),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 30),
+            child: AppBar(
+              backgroundColor: const Color(0xffFCFEE8),
+              elevation: 0,
+              leading: IconButton(
+                icon: const Icon(
+                  Icons.arrow_back_ios_new,
+                  color: Colors.black,
+                  size: 22,
+                ),
+                onPressed: () => Get.back(),
               ),
-              onPressed: () => Get.back(),
-            ),
-            title: const Text(
-              "Edit Task",
-              style: TextStyle(
-                fontFamily: 'Rhotek', // Font Rhotek
-                color: Colors.black,
-                fontSize: 22,
-                fontWeight: FontWeight.w700, // semi-bold
-                letterSpacing: 0.3,
+              title: const Text(
+                "Edit Task",
+                style: TextStyle(
+                  fontFamily: 'Rhotek', // Font Rhotek
+                  color: Colors.black,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w700, // semi-bold
+                  letterSpacing: 0.3,
+                ),
               ),
+              centerTitle: true,
             ),
-            centerTitle: true,
           ),
         ),
-      ),
-      body: Obx(() {
-        if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
+        body: Obx(() {
+          if (controller.isLoading.value) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-        return SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Title pill input
-                _PillTextField(
-                  controller: controller.titleC,
-                  hintText: 'Judul',
-                  blue: pillBlue,
-                ),
-                const SizedBox(height: 14),
+          return SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Title pill input
+                  _PillTextField(
+                    controller: controller.titleC,
+                    hintText: 'Judul',
+                    blue: pillBlue,
+                  ),
+                  const SizedBox(height: 14),
 
-                // Date pill selector
-                _PillDateSelector(
-                  valueText: _formatDate(controller.deadline.value),
-                  blue: pillBlue,
-                  onTap: () async {
-                    final now = DateTime.now();
-                    final today = DateTime(now.year, now.month, now.day);
-                    final current = controller.deadline.value;
-                    final safeInitial = (current != null && current.isAfter(today))
-                        ? current
-                        : today;
+                  // Date pill selector
+                  _PillDateSelector(
+                    valueText: _formatDate(controller.deadline.value),
+                    blue: pillBlue,
+                    onTap: () async {
+                      final now = DateTime.now();
+                      final today = DateTime(now.year, now.month, now.day);
+                      final current = controller.deadline.value;
+                      final safeInitial =
+                          (current != null && current.isAfter(today))
+                              ? current
+                              : today;
 
-                    final date = await showDatePicker(
-                      context: context,
-                      initialDate: safeInitial,
-                      firstDate: today, // block past dates
-                      lastDate: DateTime(2035),
-                    );
-                    if (date != null) {
-                      controller.deadline.value = date;
-                    }
-                  },
-                ),
-                const SizedBox(height: 18),
+                      final date = await showDatePicker(
+                        context: context,
+                        initialDate: safeInitial,
+                        firstDate: today, // block past dates
+                        lastDate: DateTime(2035),
+                      );
+                      if (date != null) {
+                        controller.deadline.value = date;
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 18),
 
-                // Prioritas switch row
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Prioritas',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
+                  // Prioritas switch row
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Prioritas',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
-                    ),
-                    Obx(() => Switch(
+                      Obx(
+                        () => Switch(
                           value: controller.isPriority.value,
                           onChanged: (v) => controller.isPriority.value = v,
                           activeColor: Colors.white,
                           activeTrackColor: Colors.redAccent,
                           inactiveThumbColor: Colors.white,
                           inactiveTrackColor: Colors.grey,
-                        )),
-                  ],
-                ),
-                const SizedBox(height: 14),
-
-                // Description card styled like pill
-                _PillTextField(
-                  controller: controller.descC,
-                  hintText: 'Deskripsi',
-                  blue: pillBlue,
-                  minLines: 5,
-                  maxLines: 8,
-                ),
-
-                const SizedBox(height: 40),
-
-                // Edit button
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: controller.updateTask,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: pillBlue,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 18,
+                        ),
                       ),
-                      shape: const StadiumBorder(),
-                      elevation: 6,
-                    ),
-                    child: const Text(
-                      'Konfirmasi',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
+                    ],
+                  ),
+                  const SizedBox(height: 14),
+
+                  // Description card styled like pill
+                  _PillTextField(
+                    controller: controller.descC,
+                    hintText: 'Deskripsi',
+                    blue: pillBlue,
+                    minLines: 5,
+                    maxLines: 8,
+                  ),
+
+                  const SizedBox(height: 40),
+
+                  // Edit button
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: controller.updateTask,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: pillBlue,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        shape: const StadiumBorder(),
+                        elevation: 6,
+                      ),
+                      child: const Text(
+                        'Konfirmasi',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        );
-      }),
+          );
+        }),
     );
   }
 }
@@ -192,11 +193,7 @@ class _PillTextField extends StatelessWidget {
         color: blue,
         borderRadius: BorderRadius.circular(18),
         boxShadow: const [
-          BoxShadow(
-            color: Colors.black26,
-            blurRadius: 8,
-            offset: Offset(0, 4),
-          ),
+          BoxShadow(color: Colors.black26, blurRadius: 8, offset: Offset(0, 4)),
         ],
       ),
       child: TextField(
@@ -213,8 +210,10 @@ class _PillTextField extends StatelessWidget {
             color: Colors.white.withOpacity(0.85),
             fontWeight: FontWeight.w600,
           ),
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 18,
+            vertical: 14,
+          ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(18),
             borderSide: BorderSide.none,
@@ -275,10 +274,7 @@ class _PillDateSelector extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                const Icon(
-                  Icons.date_range,
-                  color: Colors.white,
-                ),
+                const Icon(Icons.date_range, color: Colors.white),
               ],
             ),
           ),
