@@ -9,6 +9,9 @@ import '../../task_detail/views/task_detail_view.dart';
 import '../../notification/views/notification_view.dart';
 import '../../notification/bindings/notification_binding.dart';
 import '../../notification/controllers/notification_controller.dart';
+import '../../EditTask/bindings/edit_task_binding.dart';
+import '../../EditTask/views/edit_task_view.dart';
+import '../../EditTask/controllers/edit_task_controller.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key}); // <-- pakai const, hapus Get.put()
@@ -672,15 +675,46 @@ class HomeView extends GetView<HomeController> {
                       ],
                   onSelected: (v) {
                     if (v == 1) {
-                      // contoh: navigasi ke edit (implementasi sesuai kebutuhan)
-                      Get.toNamed('/edit-task', arguments: t.id);
+                      // Navigasi ke EditTask dengan transisi Cupertino
+                      if (!Get.isRegistered<EditTaskController>()) {
+                        EditTaskBinding().dependencies();
+                      }
+                      Navigator.of(Get.context!).push(
+                        CupertinoPageRoute(
+                          builder: (_) => const EditTaskView(),
+                          settings: RouteSettings(arguments: t.id),
+                        ),
+                      );
                     } else if (v == 2) {
                       final id = t.id;
                       if (id == null) {
                         Get.snackbar('Error', 'Task id kosong');
                         return;
                       }
-                      controller.deleteTask(id);
+
+                      showCupertinoDialog(
+                        context: Get.context!,
+                        builder: (_) => CupertinoAlertDialog(
+                          title: const Text('Hapus Task?'),
+                          content: const Text(
+                            'Tindakan ini tidak bisa dibatalkan.',
+                          ),
+                          actions: [
+                            CupertinoDialogAction(
+                              child: const Text('Batal'),
+                              onPressed: () => Navigator.of(Get.context!).pop(),
+                            ),
+                            CupertinoDialogAction(
+                              isDestructiveAction: true,
+                              child: const Text('Hapus'),
+                              onPressed: () async {
+                                Navigator.of(Get.context!).pop();
+                                await controller.deleteTask(id);
+                              },
+                            ),
+                          ],
+                        ),
+                      );
                     }
                   },
                   child: Container(

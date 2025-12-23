@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../model/TaskModel.dart';
 import '../../../core/services/api_services.dart';
+import 'package:ticktask_frontend/app/routes/app_pages.dart';
+import '../../home/controllers/home_controller.dart';
 
 class EditTaskController extends GetxController {
   final api = ApiService();
@@ -13,6 +15,7 @@ class EditTaskController extends GetxController {
   final descC = TextEditingController();
   final deadline = Rxn<DateTime>();
   final isDone = false.obs;
+  final isPriority = false.obs;
 
   late int taskId;
 
@@ -38,6 +41,7 @@ class EditTaskController extends GetxController {
         descC.text = model.description;
         deadline.value = model.deadline;
         isDone.value = model.isDone;
+        isPriority.value = (model.isPriority == 1);
       }
     } finally {
       isLoading.value = false;
@@ -53,13 +57,21 @@ class EditTaskController extends GetxController {
         "description": descC.text.trim(),
         "deadline": deadline.value?.toString().split(".").first,
         "is_done": isDone.value ? 1 : 0,
+        "is_priority": isPriority.value ? 1 : 0,
       };
 
       final res = await api.updateTask(taskId, body);
 
       if (res.isOk && res.body?['status'] == true) {
-        // ✅ CUMA INI
-        Get.back(result: true);
+        // refresh home tasks if controller is available
+        try {
+          if (Get.isRegistered<HomeController>()) {
+            await Get.find<HomeController>().fetchTasks();
+          }
+        } catch (_) {}
+
+        // navigate back to Home and rebuild tabs
+        Get.offAllNamed(Routes.HOME);
       } else {
         Get.back(result: false);
       }

@@ -5,6 +5,7 @@ class TaskModel {
   String description;
   DateTime? deadline;
   bool isDone;
+  int isPriority; // 0/1 from backend
 
   TaskModel({
     required this.id,
@@ -13,6 +14,7 @@ class TaskModel {
     required this.description,
     this.deadline,
     required this.isDone,
+    required this.isPriority,
   });
 
   factory TaskModel.fromJson(Map<String, dynamic> json) {
@@ -24,6 +26,7 @@ class TaskModel {
       deadline:
           json['deadline'] != null ? DateTime.parse(json['deadline']) : null,
       isDone: json['is_done'] == 1,
+      isPriority: json['is_priority'] ?? 0,
     );
   }
 
@@ -33,6 +36,7 @@ class TaskModel {
       "description": description,
       "deadline": deadline?.toString().split(".").first,
       "is_done": isDone ? 1 : 0,
+      "is_priority": isPriority,
     };
   }
 }

@@ -44,24 +44,34 @@ class AboutView extends GetView<AboutController> {
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              SizedBox(height: 20),
+            children: [
+              // SizedBox(height: 20),
+
+              // const Center(
+              //   child: Text(
+              //     "TickTask",
+              //     style: TextStyle(
+              //       fontFamily: 'Rothek', // Font Rhotek
+              //       fontSize: 36,
+              //       fontWeight: FontWeight.w900, // super bold
+              //       letterSpacing: 0.5,
+              //     ),
+              //   ),
+              // ),
+
+              const SizedBox(height: 20),
 
               Center(
-                child: Text(
-                  "TickTask",
-                  style: TextStyle(
-                    fontFamily: 'Rothek', // Font Rhotek
-                    fontSize: 36,
-                    fontWeight: FontWeight.w900, // super bold
-                    letterSpacing: 0.5,
-                  ),
+                child: Image.asset(
+                  'assets/images/TickTask_Logo_Transparant.png',
+                  width: 180,
+                  fit: BoxFit.contain,
                 ),
               ),
 
-              SizedBox(height: 20),
+              const SizedBox(height: 30),
 
-              Text(
+              const Text(
                 "TickTask adalah aplikasi manajemen tugas yang dirancang untuk "
                 "membantu kamu mengatur aktivitas harian dengan lebih mudah dan "
                 "terstruktur. Dengan tampilan yang sederhana dan intuitif, kamu "

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import '../../../core/values/app_colors.dart';
 import '../controllers/task_detail_controller.dart';
@@ -10,17 +11,32 @@ class TaskDetailView extends GetView<TaskDetailController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.mildBlue,
-      appBar: AppBar(
-        backgroundColor: AppColors.mildBlue,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.lightCream),
-        title: const Text(
-          "Task Detail",
-          style: TextStyle(
-            color: AppColors.lightCream,
-            fontFamily: 'Rothek',
-            fontSize: 26,
-            fontWeight: FontWeight.w900,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight + 30),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 30),
+          child: AppBar(
+            backgroundColor: AppColors.mildBlue,
+            elevation: 0,
+            leading: IconButton(
+              icon: const Icon(
+                Icons.arrow_back_ios_new,
+                color: Colors.white,
+                size: 22,
+              ),
+              onPressed: () => Get.back(),
+            ),
+            title: const Text(
+              "Task Detail",
+              style: TextStyle(
+                fontFamily: 'Rhotek', // Font Rhotek
+                color: Colors.white,
+                fontSize: 22,
+                fontWeight: FontWeight.w700, // semi-bold
+                letterSpacing: 0.3,
+              ),
+            ),
+            centerTitle: true,
           ),
         ),
       ),
@@ -146,25 +162,25 @@ class TaskDetailView extends GetView<TaskDetailController> {
                     onTap: () async {
                       // Jika belum selesai, tampilkan dialog konfirmasi
                       if (!controller.isDone.value) {
-                        final confirm = await showDialog<bool>(
+                        final confirm = await showCupertinoDialog<bool>(
                           context: context,
-                          builder: (ctx) {
-                            return AlertDialog(
-                              title: const Text('Konfirmasi'),
-                              content: const Text(
-                                  'Apakah Anda yakin ingin menandai task ini sebagai selesai?'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.of(ctx).pop(false),
-                                  child: const Text('Batal'),
-                                ),
-                                ElevatedButton(
-                                  onPressed: () => Navigator.of(ctx).pop(true),
-                                  child: const Text('Konfirmasi'),
-                                ),
-                              ],
-                            );
-                          },
+                          builder: (ctx) => CupertinoAlertDialog(
+                            title: const Text('Konfirmasi'),
+                            content: const Text(
+                              'Apakah Anda yakin ingin menandai task ini sebagai selesai?',
+                            ),
+                            actions: [
+                              CupertinoDialogAction(
+                                child: const Text('Batal'),
+                                onPressed: () => Navigator.of(ctx).pop(false),
+                              ),
+                              CupertinoDialogAction(
+                                isDefaultAction: true,
+                                child: const Text('Konfirmasi'),
+                                onPressed: () => Navigator.of(ctx).pop(true),
+                              ),
+                            ],
+                          ),
                         );
 
                         if (confirm == true) {

@@ -21,17 +21,32 @@ class HistoryDetailView extends GetView<HistoryDetailController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.mildYellow,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-        title: const Text(
-          "History Detail",
-          style: TextStyle(
-            fontFamily: 'Rothek',
-            fontSize: 26,
-            fontWeight: FontWeight.w900,
-            color: Colors.white,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight + 30),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 30),
+          child: AppBar(
+            backgroundColor: AppColors.mildYellow,
+            elevation: 0,
+            leading: IconButton(
+              icon: const Icon(
+                Icons.arrow_back_ios_new,
+                color: Colors.white,
+                size: 22,
+              ),
+              onPressed: () => Get.back(),
+            ),
+            title: const Text(
+              "History Detail",
+              style: TextStyle(
+                fontFamily: 'Rhotek', // Font Rhotek
+                color: Colors.white,
+                fontSize: 22,
+                fontWeight: FontWeight.w700, // semi-bold
+                letterSpacing: 0.3,
+              ),
+            ),
+            centerTitle: true,
           ),
         ),
       ),

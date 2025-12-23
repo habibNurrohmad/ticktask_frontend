@@ -19,28 +19,35 @@ class _CreateNewTaskViewState extends State<CreateNewTaskView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: GestureDetector(
-          onTap: () => Get.back(),
-          child: const Icon(
-            Icons.arrow_back_ios_new,
-            color: Colors.black,
-            size: 20,
+      backgroundColor: const Color(0xffFCFEE8),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight + 30),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 30),
+          child: AppBar(
+            backgroundColor: const Color(0xffFCFEE8),
+            elevation: 0,
+            leading: IconButton(
+              icon: const Icon(
+                Icons.arrow_back_ios_new,
+                color: Colors.black,
+                size: 22,
+              ),
+              onPressed: () => Get.back(),
+            ),
+            title: const Text(
+              "Task Baru",
+              style: TextStyle(
+                fontFamily: 'Rhotek', // Font Rhotek
+                color: Colors.black,
+                fontSize: 22,
+                fontWeight: FontWeight.w700, // semi-bold
+                letterSpacing: 0.3,
+              ),
+            ),
+            centerTitle: true,
           ),
         ),
-        title: const Text(
-          "Task Baru",
-          style: TextStyle(
-            fontFamily: 'Rothek',
-            fontSize: 22,
-            fontWeight: FontWeight.w700,
-            color: Colors.black,
-          ),
-        ),
-        centerTitle: true,
       ),
 
       body: Padding(
