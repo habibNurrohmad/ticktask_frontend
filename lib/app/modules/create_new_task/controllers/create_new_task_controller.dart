@@ -48,7 +48,7 @@ class CreateNewTaskController extends GetxController {
         Get.snackbar("Berhasil", "Task berhasil dibuat");
         await Future.delayed(const Duration(milliseconds: 500));
 
-        // Pastikan MainNav berada di tab Home jika ada
+        // Memastikan MainNav berada di tab Home jika ada
         try {
           final mainC = Get.find<MainNavController>();
           mainC.onTabSelected(0);
